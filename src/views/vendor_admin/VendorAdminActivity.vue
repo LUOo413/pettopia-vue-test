@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-2">
+  <div class="container ">
     <select v-model="eventFilter" class="form-select">
       <option value="all">顯示全部</option>
       <option value="ongoing">顯示進行中</option>
@@ -117,6 +117,16 @@ const initDataTable = () => {
         });
       });
 
+      document.querySelectorAll('.registration-btn').forEach(el => {
+        el.addEventListener('click', (e) => {
+          let registrationId = e.target.getAttribute('data-id');
+          console.log('查看活動報名 ID:', registrationId);
+          if (registrationId) {
+            router.push({ name: 'VendorAdminActivityRegistration', params: { id: registrationId } });
+          }
+        });
+      });
+
       document.querySelectorAll('.delete-btn').forEach(el => {
         el.addEventListener('click', async (e) => {
           e.stopPropagation();
@@ -154,7 +164,8 @@ const updateDataTable = async () => {
           event.activityPeopleNumber ? `${event.activityPeopleNumber.currentParticipants} / ${event.activityPeopleNumber.maxParticipants}` : "未設定",
           event.numberVisitor,
           `<button class="btn btn-danger btn-sm delete-btn" data-id="${event.id}">刪除</button>
-          <button class="btn btn-info btn-sm view-detail-btn" data-id="${event.id}">查看詳情</button>`
+          <button class="btn btn-info btn-sm view-detail-btn" data-id="${event.id}">查看詳情</button>
+          <button class="btn btn-info btn-sm registration-btn" data-id="${event.id}">查看報名</button>`
         ];
       } catch (error) {
         console.error('獲取活動圖片失敗', error);
@@ -181,6 +192,7 @@ const deleteEvent = async (activityId) => {
   try {
     await axios.delete(`http://localhost:8080/${activityId}`);
     events.value = events.value.filter(event => event.id !== activityId);
+    fetchEvents();
     // 🚀 確保 DataTable 同步刪除該行
     // if (dataTableInstance) {
     //   let row = dataTableInstance.row(`[data-id="${activityId}"]`);

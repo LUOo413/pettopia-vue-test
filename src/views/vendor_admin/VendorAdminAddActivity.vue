@@ -39,13 +39,13 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>開始時間:</label>
-                                <input type="datetime-local" id="start_time" name="start_time" v-model="startTime" :min="currentDateTime"
-                                    required="required" />
+                                <input type="datetime-local" id="start_time" name="start_time" v-model="startTime"
+                                    :min="currentDateTime" required="required" />
                             </div>
                             <div class="form-group">
-                                <label>結束時間:</label> 
-                                <input type="datetime-local" name="end_time" id="end_time" v-model="endTime" :min="startTime"
-                                    required="required" />
+                                <label>結束時間:</label>
+                                <input type="datetime-local" name="end_time" id="end_time" v-model="endTime"
+                                    :min="startTime" required="required" />
                             </div>
                         </div>
                         <div class="form-row">
@@ -86,7 +86,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted,watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
 
 // 表單資料
@@ -198,20 +198,25 @@ onMounted(() => {
         .catch(error => {
             console.error("獲取活動類型失敗：", error);
         });
-    
+
     toggleMaxParticipants();
-    
+
 });
 </script>
 
 <style scoped>
 .container {
-    max-width: 95%;
+    max-width: 70%;
     margin: auto;
     background: #fff;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-box {
+    width: 100%;
+    max-width: 100%;
 }
 
 .form-group {

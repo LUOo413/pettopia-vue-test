@@ -7,6 +7,10 @@ import VendorAdminActivity from '@/views/vendor_admin/VendorAdminActivity.vue';
 import VendorAdminActivityDetail from '@/views/vendor_admin/VendorAdminActivityDetail.vue';
 import VendorAdminAddActivity from '@/views/vendor_admin/VendorAdminAddActivity.vue';
 import VendorAdminReviews from '@/views/vendor_admin/VendorAdminReviews.vue';
+import VendorAdminActivityReviews from '@/views/vendor_admin/VendorAdminActivityReviews.vue';
+import VendorAdminActivityReviews2 from '@/views/vendor_admin/VendorAdminActivityReviews2.vue';
+import VendorAdminActivityRegistration from '@/views/vendor_admin/VendorAdminActivityRegistration.vue';
+
 
 export default [
     {
@@ -36,5 +40,17 @@ export default [
         path: '/vendor/admin/reviews',
         name: 'VendorAdminReviews',
         component: VendorAdminReviews
+    },
+
+    {
+        path: '/vendor/admin/activity/reviews',
+        name: 'VendorAdminActivityReviews',
+        component: VendorAdminActivityReviews
+    },
+
+    {
+        path: '/vendor/admin/activity/registration/:id',
+        name: 'VendorAdminActivityRegistration',
+        component: VendorAdminActivityRegistration
     }
 ];

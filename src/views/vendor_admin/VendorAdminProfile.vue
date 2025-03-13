@@ -259,6 +259,26 @@ onMounted(async () => {
 
 
 <style scoped>
+.container {
+    max-width: 70%;
+    /* 这里将内容区域宽度设置为80%，预留20%给sidebar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.content-box {
+    width: 100%;
+    max-width: 100%;
+    /* 设置最大宽度为100%，让内容区域自适应缩小 */
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
 .btn-transparent {
     border: 1px solid #ccc;
     background-color: transparent;
@@ -280,12 +300,11 @@ onMounted(async () => {
     object-fit: cover;
 }
 
-.container {
+/* .container {
     max-width: 95%;
     display: flex;
     align-items: center;
     justify-content: center;
-    /*             height: 100vh; */
     position: relative;
 }
 
@@ -297,7 +316,7 @@ onMounted(async () => {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
-}
+} */
 
 .back-button {
     position: absolute;
