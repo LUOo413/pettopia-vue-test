@@ -20,7 +20,7 @@
         <!-- 表格部分 -->
         <div class="table-container">
             <h3>报名人员列表</h3>
-            <table>
+            <table id="reviewsTable">
                 <thead>
                     <tr>
                         <th>姓名</th>
@@ -44,12 +44,41 @@
 
 <script setup>
 import { defineComponent } from 'vue';
-import VChart from 'vue-echarts';  // 确保正确导入 vue-echarts
+
 import * as echarts from 'echarts';  // 导入 echarts 库
 import { Chart as ChartJS, LinearScale, BarController, BarElement, CategoryScale, Title, Tooltip, Legend } from 'chart.js';
-
+import DataTable from 'datatables.net-dt'
+import 'datatables.net-dt/css/dataTables.dataTables.css'
 // 注册比例尺和其他必要的模块
 ChartJS.register(LinearScale, BarController, BarElement, CategoryScale, Title, Tooltip, Legend);
+
+
+// 初始化 DataTables
+const initializeDataTable = () => {
+  nextTick(() => {
+  if (dataTable) {
+    dataTable.destroy()  // 销毁旧实例
+  }
+  dataTable = new DataTable('#reviewsTable', {
+    pageLength: 5, // 每頁顯示 5 筆資料
+    lengthMenu: [5, 10, 20, 50],
+    searching: true, // 啟用搜尋
+    ordering: true,  // 啟用排序
+    responsive: true,
+    language: {
+      search: "搜尋：",
+      lengthMenu: "顯示 _MENU_ 筆資料",
+      info: "顯示第 _START_ 筆到第 _END_ 筆，共 _TOTAL_ 筆",
+      paginate: {
+        first: "首頁",
+        previous: "上一頁",
+        next: "下一頁",
+        last: "最後一頁"
+      }
+    }
+  })
+})
+}
 
 const fetchRegistration = () => {
     axios.get('http://localhost:8080/api/vendor_admin/review?vendorId=1', {

@@ -8,7 +8,7 @@
             <!-- 活動列表 -->
             <div class="activities-table-container" :style="{ flex: activeReview ? 0.5 : 1 }">
 
-                <table class="table table-bordered">
+                <table id="reviewsTable" class="table table-bordered">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -39,11 +39,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted,nextTick } from 'vue';
 import axios from 'axios';
 import activityreviews from './activityreviews.vue'; // 引入子組件
 import VendorAdminSidebar from '@/components/VendorAdminSidebar.vue';
-
+import DataTable from 'datatables.net-dt'
+import 'datatables.net-dt/css/dataTables.dataTables.css'
 const vendorId = 1; // 假設固定店家ID
 const activities = ref([]);
 const reviews = ref({});
@@ -51,11 +52,43 @@ const activeReviews = ref({});
 const activeReview = ref(null); // 用於追蹤當前顯示評論的活動ID
 const currentActivity = ref(null);
 const currentActivityId = ref(null); // 當前打開評論的活動ID
+let dataTable = null
+
+// 初始化 DataTables
+const initializeDataTable = () => {
+  nextTick(() => {
+  if (dataTable) {
+    dataTable.destroy()  // 销毁旧实例
+  }
+  dataTable = new DataTable('#reviewsTable', {
+    pageLength: 5, // 每頁顯示 5 筆資料
+    lengthMenu: [5, 10],
+    searching: true, // 啟用搜尋
+    ordering: true,  // 啟用排序
+    responsive: true,
+    language: {
+      search: "搜尋：",
+      lengthMenu: "顯示 _MENU_ 筆資料",
+      info: "顯示第 _START_ 筆到第 _END_ 筆，共 _TOTAL_ 筆",
+      infoEmpty: "顯示第 _START_ 筆到第 _END_ 筆，共 _TOTAL_ 筆",  // 修改無資料時的顯示
+      zeroRecords: "沒有找到匹配的紀錄",
+      infoFiltered: "(從 _MAX_ 筆資料過濾)",
+      paginate: {
+        first: "首頁",
+        previous: "上一頁",
+        next: "下一頁",
+        last: "最後一頁"
+      }
+    }
+  })
+})
+}
 
 const loadActivities = async () => {
     try {
         const response = await axios.get(`http://localhost:8080/api/vendor_admin/activity/${vendorId}`, { headers: { 'Accept': 'application/json' } });
         activities.value = response.data;
+        initializeDataTable()
     } catch (error) {
         console.error('Error fetching activities:', error);
     }
@@ -93,8 +126,9 @@ const toggleReviews = (activityId) => {
     }
 };
 
-onMounted(() => {
-    loadActivities();
+onMounted(async() => {
+    await loadActivities();
+    initializeDataTable()
 });
 </script>
 
@@ -113,6 +147,9 @@ onMounted(() => {
     justify-content: space-between;
 }
 
+th {
+background-color: #F4D8B1 !important;
+}
 .activities-table-container {
     flex: 1.5;
     min-width: 600px;

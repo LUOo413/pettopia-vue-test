@@ -163,9 +163,10 @@ const updateDataTable = async () => {
           event.isRegistrationRequired ? '需報名' : '不需報名',
           event.activityPeopleNumber ? `${event.activityPeopleNumber.currentParticipants} / ${event.activityPeopleNumber.maxParticipants}` : "未設定",
           event.numberVisitor,
-          `<button class="btn btn-danger btn-sm delete-btn" data-id="${event.id}">刪除</button>
-          <button class="btn btn-info btn-sm view-detail-btn" data-id="${event.id}">查看詳情</button>
-          <button class="btn btn-info btn-sm registration-btn" data-id="${event.id}">查看報名</button>`
+          `
+          <button class="btn btn-info btn-sm view-detail-btn" data-id="${event.id}">查看詳情</button><br>
+          <button class="btn btn-info btn-sm registration-btn" data-id="${event.id}">查看報名</button><br>
+          <button class="btn btn-danger btn-sm delete-btn" data-id="${event.id}">刪除</button>`
         ];
       } catch (error) {
         console.error('獲取活動圖片失敗', error);
@@ -240,6 +241,9 @@ const openAddEventModal = () => {
   /* 防止超出畫面 */
 }
 
+th {
+background-color: #F4D8B1 !important;
+}
 /* 確保 DataTable 內容不會跑掉 */
 .dataTables_wrapper {
   width: 100%;

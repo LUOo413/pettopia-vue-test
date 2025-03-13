@@ -1,14 +1,9 @@
-import ShopIndex from '@/views/shop/ShopIndex.vue';
-import ShopCheckout from '@/views/shop/ShopCheckout.vue';
-import ShopOrderHistory from '@/views/shop/ShopOrderHistory.vue';
-import ShopOrderDetail from '@/views/shop/ShopOrderDetail.vue';
 import VendorAdminProfile from '@/views/vendor_admin/VendorAdminProfile.vue';
 import VendorAdminActivity from '@/views/vendor_admin/VendorAdminActivity.vue';
 import VendorAdminActivityDetail from '@/views/vendor_admin/VendorAdminActivityDetail.vue';
 import VendorAdminAddActivity from '@/views/vendor_admin/VendorAdminAddActivity.vue';
 import VendorAdminReviews from '@/views/vendor_admin/VendorAdminReviews.vue';
 import VendorAdminActivityReviews from '@/views/vendor_admin/VendorAdminActivityReviews.vue';
-import VendorAdminActivityReviews2 from '@/views/vendor_admin/VendorAdminActivityReviews2.vue';
 import VendorAdminActivityRegistration from '@/views/vendor_admin/VendorAdminActivityRegistration.vue';
 
 
@@ -52,5 +47,7 @@ export default [
         path: '/vendor/admin/activity/registration/:id',
         name: 'VendorAdminActivityRegistration',
         component: VendorAdminActivityRegistration
-    }
+    },
+
+
 ];
