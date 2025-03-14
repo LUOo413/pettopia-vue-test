@@ -242,8 +242,9 @@ const openAddEventModal = () => {
 }
 
 th {
-background-color: #F4D8B1 !important;
+  background-color: #F4D8B1 !important;
 }
+
 /* 確保 DataTable 內容不會跑掉 */
 .dataTables_wrapper {
   width: 100%;
