@@ -16,7 +16,7 @@
           <th>地點</th>
           <th>活動類型</th>
           <th>是否需要報名</th>
-          <th>報名人數/最大人數</th>
+          <th>報名成功數/最大人數</th>
           <th>瀏覽人數</th>
           <th>操作</th>
         </tr>
@@ -36,7 +36,7 @@ import DataTable from 'datatables.net-dt';
 import { nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter();
-
+const imageCache = ref({});
 const events = ref([]);
 const eventFilter = ref('all');
 let dataTableInstance = null;
@@ -47,12 +47,30 @@ const fetchEvents = async () => {
     const response = await axios.get('http://localhost:8080/api/vendor_admin/activity/1');
     events.value = response.data || []; // 确保 events 是数组
     console.log("活動數據:", response.data); // 打印获取的数据
+    await loadEventImages();
   } catch (error) {
     console.error('獲取活動數據失敗', error);
     events.value = []; // 捕获错误时，确保 events 为空数组
   }
 };
-
+// 获取活动图片
+const loadEventImages = async () => {
+  for (let event of events.value) {
+    try {
+      let response = await axios.get(`http://localhost:8080/photos/ids?vendorActivityId=${event.id}`);
+      let imageIds = response.data;
+      if (imageIds.length > 0) {
+        event.imageUrl = `http://localhost:8080/photos/download?photoId=${imageIds[0]}`;
+        console.log("图片 URL:", event.imageUrl); // 输出图片 URL 来查看是否正确
+      } else {
+        event.imageUrl = null;
+      }
+    } catch (error) {
+      console.error('獲取活動圖片失敗', error);
+      event.imageUrl = null; // 如果获取失败，设置为默认图片
+    }
+  }
+};
 
 // 🎯 過濾活動
 const filteredEvents = computed(() => {
@@ -76,6 +94,27 @@ const filteredEvents = computed(() => {
   });
 });
 
+// 获取活动图片的函数，避免重复请求
+const getEventImageUrl = async (eventId) => {
+  // 如果缓存中有图片，直接返回
+  if (imageCache.value[eventId]) {
+    return imageCache.value[eventId];
+  }
+
+  // 如果缓存没有，从服务器请求
+  try {
+    const response = await axios.get(`http://localhost:8080/photos/ids?vendorActivityId=${eventId}`);
+    const imageIds = response.data;
+    const firstImageUrl = imageIds.length > 0 ? `http://localhost:8080/photos/download?photoId=${imageIds[0]}` : null;
+    console.log(firstImageUrl)
+    // 缓存图片 URL
+    imageCache.value[eventId] = firstImageUrl;
+    return firstImageUrl;
+  } catch (error) {
+    console.error('獲取活動圖片失敗', error);
+    return null;
+  }
+};
 
 // 📅 日期格式化函數
 const formatDate = (dateString) => {
@@ -140,7 +179,7 @@ const initDataTable = () => {
   });
 };
 
-// 🆕 更新 DataTables 表格內容
+// 更新 DataTable
 const updateDataTable = async () => {
   if (!dataTableInstance) return;
 
@@ -148,30 +187,24 @@ const updateDataTable = async () => {
 
   let promises = filteredEvents.value
     .filter(event => events.value.some(e => e.id === event.id))
-    .map(async event => {
-      try {
-        let response = await axios.get(`http://localhost:8080/photos/ids?vendorActivityId=${event.id}`);
-        let imageIds = response.data;
-        let firstImageUrl = imageIds.length > 0 ? `http://localhost:8080/photos/download?photoId=${imageIds[0]}` : null;  // 或者设置为默认图片
-
-        return [
-          `<img src="${firstImageUrl}" class="img-fluid rounded imgact" alt="活動圖片">`,
-          `<a href="javascript:void(0);" class="event-name" data-id="${event.id}">${event.name}</a>`,
-          `${formatDate(event.startTime)} - ${formatDate(event.endTime)}`,
-          event.address,
-          event.activityType.name,
-          event.isRegistrationRequired ? '需報名' : '不需報名',
-          event.activityPeopleNumber ? `${event.activityPeopleNumber.currentParticipants} / ${event.activityPeopleNumber.maxParticipants}` : "未設定",
-          event.numberVisitor,
-          `
+    .map(async (event) => {
+      // 使用已加载的图片 URL
+      let imageUrl = await getEventImageUrl(event.id);  // 使用缓存获取图片 URL
+      console.log(imageUrl)
+      return [
+        `<img src="${imageUrl}" class="img-fluid rounded imgact" alt="活動圖片">`,
+        `<a href="javascript:void(0);" class="event-name" data-id="${event.id}">${event.name}</a>`,
+        `${formatDate(event.startTime)} - ${formatDate(event.endTime)}`,
+        event.address,
+        event.activityType.name,
+        event.isRegistrationRequired ? '需報名' : '不需報名',
+        event.activityPeopleNumber ? `${event.activityPeopleNumber.currentParticipants} / ${event.activityPeopleNumber.maxParticipants}` : "未設定",
+        event.numberVisitor,
+        `
           <button class="btn btn-info btn-sm view-detail-btn" data-id="${event.id}">查看詳情</button><br>
           <button class="btn btn-info btn-sm registration-btn" data-id="${event.id}">查看報名</button><br>
           <button class="btn btn-danger btn-sm delete-btn" data-id="${event.id}">刪除</button>`
-        ];
-      } catch (error) {
-        console.error('獲取活動圖片失敗', error);
-        return null;
-      }
+      ];
     });
 
   // 等待所有的 promises 完成
@@ -184,7 +217,6 @@ const updateDataTable = async () => {
 
   await nextTick();  // 确保 Vue 完成 DOM 更新
   dataTableInstance.draw();  // 刷新 DataTable
-
 };
 
 
@@ -192,18 +224,14 @@ const updateDataTable = async () => {
 const deleteEvent = async (activityId) => {
   try {
     await axios.delete(`http://localhost:8080/${activityId}`);
-    events.value = events.value.filter(event => event.id !== activityId);
-    fetchEvents();
-    // 🚀 確保 DataTable 同步刪除該行
-    // if (dataTableInstance) {
-    //   let row = dataTableInstance.row(`[data-id="${activityId}"]`);
-    //   if (row.length) {
-    //     row.remove();
-    //     dataTableInstance.draw();
 
-    //   }
-    // }
-    // 等待下一次 UI 更新後才執行 updateDataTable
+
+    events.value = events.value.filter(event => event.id !== activityId);
+
+    // 更新 DataTable
+    fetchEvents();
+    initDataTable()
+
   } catch (error) {
     console.error('刪除活動失敗', error);
   }
@@ -234,8 +262,8 @@ const openAddEventModal = () => {
 <style scoped>
 /* 表格容器 */
 .container {
-  width: 90%;
-  max-width: 1400px;
+  width: 80%;
+  max-width: 1800px;
   margin: auto;
   overflow-x: auto;
   /* 防止超出畫面 */

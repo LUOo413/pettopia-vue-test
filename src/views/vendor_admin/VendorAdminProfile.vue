@@ -118,7 +118,7 @@ import axios from 'axios';
 
 // 初始化資料
 const vendor = ref({
-    id: 1,
+    id: 1, //登入後要改
     name: '',
     address: '',
     vendorLevel: '',
@@ -230,7 +230,7 @@ onMounted(async () => {
     try {
         const email = encodeURIComponent('1234@gmail.com');  // 將 email 編碼
         const password = '1234';
-        const url = `http://localhost:8080/api/vendor_admin/profile?id=${vendor.value.id}`;
+        const url = `http://localhost:8080/api/vendor_admin/profile?id=${vendor.value.id}`; //mail的@會跑掉，所以後端先改用id
 
         // 獲取商家資料和類別
         const response = await axios.get(url);
