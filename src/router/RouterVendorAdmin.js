@@ -5,7 +5,8 @@ import VendorAdminAddActivity from '@/views/vendor_admin/VendorAdminAddActivity.
 import VendorAdminReviews from '@/views/vendor_admin/VendorAdminReviews.vue';
 import VendorAdminActivityReviews from '@/views/vendor_admin/VendorAdminActivityReviews.vue';
 import VendorAdminActivityRegistration from '@/views/vendor_admin/VendorAdminActivityRegistration.vue';
-
+import VendorAdminCalender from '@/views/vendor_admin/VendorAdminCalender.vue';
+import VendorAdminCalender2 from '@/views/vendor_admin/VendorAdminCalender2.vue';
 
 export default [
     {
@@ -49,5 +50,16 @@ export default [
         component: VendorAdminActivityRegistration
     },
 
+    {
+        path: '/vendor/admin/calender',
+        name: 'VendorAdminCalender',
+        component: VendorAdminCalender
+    },
+
+    {
+        path: '/vendor/admin/calender2',
+        name: 'VendorAdminCalender2',
+        component: VendorAdminCalender2
+    },
 
 ];
