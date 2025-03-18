@@ -1,7 +1,7 @@
 <template>
   <div class="content-body">
     <div class="container">
-      <FullCalendar ref="calendar" :options="calendarOptions" />
+      <FullCalendar ref="calendar" :options="calendarOptions" class="calender" />
       <div v-if="showEventModal, showEditEventModal" id="modal-overlay" @click="closeEventModal"></div>
       <!-- Edit Event Modal -->
       <div v-show="showEditEventModal" id="event-modal">
@@ -52,6 +52,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import axios from 'axios';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -59,10 +60,11 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 
+const vendorId = 1
 const calendar = ref(null);
 const showEventModal = ref(false);
 const showEditEventModal = ref(false);
-
+const events = ref([]);
 const eventTitle = ref('');
 const eventStartDate = ref('');
 const eventStartTime = ref('');
@@ -84,6 +86,10 @@ const calendarOptions = ref({
   editable: true,
   selectable: true,
   eventOverlap: false,
+  events: events.value,
+  eventDidMount: (info) => {
+    console.log(info.event); // 调试：查看事件是否正确渲染
+  },
   select: (info) => {
     eventStartDate.value = formatDate(info.start);
     eventStartTime.value = info.start.toISOString().substr(11, 5); // 使用選擇的開始時間
@@ -104,39 +110,93 @@ const calendarOptions = ref({
   }
 });
 
+const loadEvents = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8080/api/vendor_admin/calender/${vendorId}`);
+    const events = response.data; // 假设后端返回的事件数据是一个数组
+
+    const calendarApi = calendar.value?.getApi();
+    if (calendarApi) {
+      events.forEach(event => {
+        calendarApi.addEvent({
+          title: event.eventTitle,
+          start: event.startTime, // 確保格式正確
+          end: event.endTime,
+          backgroundColor: event.color || "#ffffff"
+        });
+      });
+    }
+  } catch (error) {
+    console.error("获取活动失败", error);
+  }
+};
+
 const formatDate = (date) => {
   const d = new Date(date);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 };
 
-const addEvent = () => {
+const addEvent = async () => {
   if (!eventTitle.value || !eventStartDate.value || !eventStartTime.value) {
     alert("請填寫完整的活動名稱與開始時間");
     return;
   }
 
-  const start = `${eventStartDate.value}T${eventStartTime.value}`;
-  const end = eventEndDate.value && eventEndTime.value
+  const formData = new FormData();
+  formData.append("vendorId", 1);  // 你需要用正確的 vendor_id
+  formData.append("eventTitle", eventTitle.value);
+  formData.append("start_time", `${eventStartDate.value}T${eventStartTime.value}`);
+  formData.append("end_time", eventEndDate.value && eventEndTime.value
     ? `${eventEndDate.value}T${eventEndTime.value}`
-    : start;
+    : `${eventStartDate.value}T${eventStartTime.value}`);
+  formData.append("color", eventColor.value);  // 发送颜色;
+  try {
+    const response = await axios.post("http://localhost:8080/api/vendor_admin/calender/add", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',  // 发送表单数据时需要设置此头部
+      },
+    });
 
-  const calendarApi = calendar.value?.getApi();
-  if (!calendarApi) {
-    console.error("無法獲取 FullCalendar API，請檢查 calendar 是否正確綁定");
-    return;
+    if (response.status === 201) {
+      alert("活動新增成功！");
+
+      events.value = [];
+
+      // 你可以根据需要在日历中添加新事件
+      const savedEvent = response.data;
+      // **直接更新 FullCalendar**
+      const calendarApi = calendar.value.getApi();
+      calendarApi.addEvent({
+        title: savedEvent.eventTitle,
+        start: savedEvent.start_time,
+        end: savedEvent.end_time,
+        backgroundColor: savedEvent.color || "#ffffff",
+      });
+
+      // **手動更新 `events.value` (可選)**
+      events.value.push({
+        title: savedEvent.eventTitle,
+        start: savedEvent.start_time,
+        end: savedEvent.end_time,
+        backgroundColor: savedEvent.color || "#ffffff",
+      });
+
+      console.log(savedEvent);
+
+      calendarApi.refetchEvents();
+      clearEventForm();
+      showEventModal.value = false;
+      events.value = [];
+      loadEvents()
+      // await fetchEvents();
+    }
+  } catch (error) {
+    console.error("新增活動失敗", error);
+    alert("新增活動失敗");
   }
-
-  calendarApi.addEvent({
-    id: String(new Date().getTime()),
-    title: eventTitle.value,
-    start: start,
-    end: end,
-    backgroundColor: eventColor.value,
-  });
-
-  clearEventForm();
-  showEventModal.value = false;
 };
+
+
 
 const updateEvent = () => {
   const calendarApi = calendar.value?.getApi();
@@ -195,6 +255,12 @@ const clearEditEventForm = () => {
   editEventColor.value = "#ffffff";
   editEventId.value = null;
 };
+
+onMounted(async () => {
+  // fetchEvents()
+  const events = await loadEvents();
+  calendarOptions.value.events = events;
+});
 </script>
 
 
@@ -245,5 +311,33 @@ button {
 .btn-secondary {
   background-color: #6c757d;
   color: white;
+}
+
+.fc-event {
+  font-size: 14px;
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.calender {
+  width: 80%;
+  /* 設置行事曆的寬度 */
+  margin: 0 auto;
+  /* 使用自動邊距來水平居中 */
+  height: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  align-items: center;
+  /* 垂直居中 */
+}
+
+.content-body {
+  display: flex;
+  justify-content: center;
+  /* 水平居中整個內容 */
 }
 </style>
