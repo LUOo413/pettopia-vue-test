@@ -11,6 +11,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, LineElement, CategorySca
 
 ChartJS.register(ArcElement, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
+
 axios.defaults.withCredentials = true; // 設定攜帶 cookie
 
 createApp(App)
