@@ -34,6 +34,7 @@
                         <select v-model="filterStatus" id="status" class="form-control" style="max-width: 150px;">
                             <option value="已認證">已認證</option>
                             <option value="申請中">申請中</option>
+                            <option value="未通過">未通過</option>
                         </select>
                     </div>
                     <table class="table">
@@ -42,7 +43,7 @@
                                 <th>認證標語</th>
                                 <th>認證狀態</th>
                                 <th>申請時間</th>
-                                <th>審核通過時間</th>
+                                <th>審核時間</th>
                                 <th>原因</th>
                                 <th>操作</th>
                             </tr>
@@ -71,8 +72,11 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
+import { useAuthStore } from '@/stores/auth'
+const authStore = useAuthStore()
+const userId = authStore.userId
 
-const vendorId = ref(1);  // 假設登入者的 vendor_id 是 1
+const vendorId = ref(userId);  // 假設登入者的 vendor_id 是 1
 const certificationTagId = ref('');
 const reason = ref('');
 const certificationTags = ref([]);

@@ -36,6 +36,7 @@
                 @click="openNotificationCardBatch(filteredPendingRegisters, 'cancel')">
                 全部拒絕
             </button>
+            <button class="btn btn-success" @click="generateReport">生成報表</button>
         </div>
 
         <!-- 表格部分 -->
@@ -50,7 +51,7 @@
                         <th>性別</th>
                         <th>年齡</th>
                         <th>電話</th>
-                        <th>mail</th>
+                        <!-- <th>mail</th> -->
                         <th>報名時間</th>
                         <th>報名狀態</th>
                         <th>操作</th>
@@ -64,7 +65,7 @@
                         <td>{{ register.member.gender == false ? '男性' : '女性' }}</td>
                         <td>{{ calculateAge(register.member.birthdate) }}</td>
                         <td>{{ register.member.phone }}</td>
-                        <td>{{ register.member.user.email }}</td>
+                        <!-- <td>{{ register.member.user.email }}</td> -->
                         <td>{{ formatDate(register.registrationTime) }}</td>
                         <td>{{ getStatusLabel(register.status) }}</td>
                         <td>
@@ -118,6 +119,9 @@
                         <label class="form-label">內容</label>
                         <textarea class="form-control" v-model="notificationContent" required></textarea>
                     </div>
+                    <button class="btn btn-secondary"
+                        @click="operationType === 'confirm' ? updateDemoData1() : updateDemoData2()"
+                        type="button">Demo</button>
                     <button class="btn btn-primary" type="submit">發送</button> <!-- 修改为 type="submit" -->
                 </form>
             </div>
@@ -136,7 +140,7 @@ import { Modal } from 'bootstrap';
 const route = useRoute();  // 取得當前路由資訊
 import { Chart as ChartJS, LinearScale, BarController, BarElement, CategoryScale, Title, Tooltip, Legend, PieController, LineController } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-
+import * as XLSX from 'xlsx';
 import DataTable from 'datatables.net-dt'
 import 'datatables.net-dt/css/dataTables.dataTables.css'
 // 注册比例尺和其他必要的模块
@@ -154,6 +158,41 @@ const notificationContent = ref('');
 const selectedRegister = ref(null);
 const selectedRegisters = ref([]); // 儲存所有待審核的報名資料
 const operationType = ref(''); // 用于标识是"确认"操作还是"取消"操作
+const activityId = route.params.id;
+const activityName = ref('');
+
+// 生成 Excel 報表
+const generateReport = () => {
+    // 根據表格資料創建工作表
+    const ws = XLSX.utils.json_to_sheet(filteredRegisters.value.map(register => ({
+        '會員ID': register.member.id,
+        '會員姓名': register.member.name,
+        '性別': register.member.gender == false ? '男性' : '女性',
+        '年齡': calculateAge(register.member.birthdate),
+        '電話': register.member.phone,
+        '報名時間': formatDate(register.registrationTime),
+        '報名狀態': getStatusLabel(register.status)
+    })));
+
+    // 創建工作簿
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, '報名資料');
+
+    // 導出 Excel 文件
+    XLSX.writeFile(wb, `報名資料_${new Date().toLocaleDateString()}.xlsx`);
+};
+
+const updateDemoData1 = () => {
+    // 这里模拟更新数据，你可以根据需要更新任何数据
+    notificationTitle.value = '報名成功通知';
+    notificationContent.value = `您已成功報名 ${activityName.value} 活動！`;
+};
+const updateDemoData2 = () => {
+    // 这里模拟更新数据，你可以根据需要更新任何数据
+    notificationTitle.value = '報名失敗通知';
+    notificationContent.value = `抱歉， ${activityName.value} 活動報名失敗`;
+};
+
 // 初始化 DataTables
 const initializeDataTable = () => {
     nextTick(() => {
@@ -210,7 +249,7 @@ const filteredRegisters = computed(() => {
 });
 
 const fetchRegistration = async () => {
-    const activityId = route.params.id;
+
     axios.get(`http://localhost:8080/api/vendor_admin/activity/registration?activityId=${activityId}`, {
         headers: {
             'Accept': 'application/json'
@@ -219,6 +258,7 @@ const fetchRegistration = async () => {
         .then(response => {
             console.log('獲取的活動報名:', response.data);  // 應該是評論數組
             registers.value = response.data;
+            // activityName.value = registers.value[0].vendorActivity.name
             console.log(registers.value);
             totalRegistrations.value = registers.value.length;
             nextTick(() => {
@@ -461,7 +501,7 @@ const updateRegistrationTrendChart = () => {
                     },
                     beginAtZero: true,  // 保證從 0 開始顯示
                     ticks: {
-                        stepSize: 5,  // 設置每隔 5 顯示一個刻度
+                        stepSize: 3,  // 設置每隔 5 顯示一個刻度
                         callback: function (value) {
                             return value;  // 顯示刻度的數字
                         }
@@ -512,7 +552,7 @@ const handleSubmit = async () => {
         }
 
         // 发送通知
-        await axios.post(`http://localhost:8080/api/vendor_admin/registration/notification/${selectedRegister.value.member.id}`, null, {
+        await axios.post(`http://localhost:8080/api/vendor_admin/registration/notification/${selectedRegister.value.member.id}/${activityId}`, null, {
             params: {
                 title: notificationTitle.value,   // 通知标题
                 content: notificationContent.value  // 通知内容
@@ -632,7 +672,12 @@ onMounted(async () => {
 }
 
 .container {
-    width: 70%;
+    width: 90%;
+    /* 增加寬度 */
+    max-width: 1200px;
+    /* 設定最大寬度 */
+    margin: 0 auto;
+    /* 讓 container 置中 */
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -649,11 +694,18 @@ onMounted(async () => {
 }
 
 .table-container {
-    margin-top: 20px;
+    width: 100%;
+    max-width: 1200px;
+    /* 限制最大寬度 */
+    margin: 20px auto;
+    /* 讓表格置中 */
+    text-align: center;
+    /* 確保內容水平居中 */
 }
 
 table {
     width: 100%;
+    /* 讓表格填滿容器 */
     border-collapse: collapse;
 }
 

@@ -3,13 +3,47 @@
   "use strict";
 
   var initPreloader = function() {
-    $(document).ready(function($) {
-    var Body = $('body');
-        Body.addClass('preloader-site');
+    // 確保 DOM 完全加載
+    onMounted(() => {
+      // 檢查當前路徑是否為子目錄
+      var pathParts = window.location.pathname.split('/');
+      if (pathParts.length <= 2) {
+        // 使用 Vue 內的方式操作 DOM
+        document.body.classList.add('preloader-site');
+      }
     });
-    $(window).load(function() {
-        $('.preloader-wrapper').fadeOut();
-        $('body').removeClass('preloader-site');
+
+    // 監聽頁面加載完成事件
+    onMounted(() => {
+      // 檢查當前路徑是否為子目錄
+      var pathParts = window.location.pathname.split('/');
+      if (pathParts.length <= 2) {
+        setTimeout(() => {
+          // 假設這裡是你用來控制預加載器的邏輯
+          document.querySelector('.preloader-wrapper').style.display = 'none';
+          document.body.classList.remove('preloader-site');
+        }, 100);
+      }
+    });
+
+    // 監聽路由變化
+    $(document).on('click', 'a[href]', function() {
+      // 檢查目標路徑是否為子目錄
+      var href = $(this).attr('href');
+      if (href) {
+        var targetPathParts = href.split('/');
+        var currentPathParts = window.location.pathname.split('/');
+        
+        // 只在非子目錄跳轉時顯示預加載器
+        if (targetPathParts.length <= 2 || 
+            (targetPathParts.length > 2 && currentPathParts.length > 2 && 
+             targetPathParts[1] !== currentPathParts[1])) {
+          setTimeout(function() {
+            $('.preloader-wrapper').fadeIn();
+            $('body').addClass('preloader-site');
+          }, 0);
+        }
+      }
     });
   }
 

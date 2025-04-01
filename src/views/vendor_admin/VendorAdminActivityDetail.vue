@@ -71,10 +71,9 @@
                     <div class="form-group full-width">
                         <label>活動圖片:</label>
                         <div class="image-upload">
-                            <div v-for="imageId in vendorActivityImageIdList" :key="imageId" class="image-preview"
-                                :data-image-id="imageId">
-                                <img :src="`http://localhost:8080/photos/download?photoId=${imageId}`" alt="活動圖片"
-                                    class="img-fluid rounded imgact" />
+                            <div v-for="(imageId, index) in vendorActivityImageIdList" :key="imageId"
+                                class="image-preview" :data-image-id="imageId">
+                                <img :src="imageUrls[index]" alt="活動圖片" class="img-fluid rounded imgact" />
                                 <button type="button" class="delete-btn"
                                     @click="deleteExistingImage(imageId)">刪除</button>
                             </div>
@@ -93,7 +92,8 @@
                     </div>
 
                     <div style="text-align: right;">
-                        <button type="submit" class="btn btn-outline-primary" id="sendBtn">修改活動</button>
+                        <button type="submit" class="btn btn-outline-primary" id="sendBtn"
+                            :disabled="isPast">修改活動</button>
                     </div>
                 </form>
             </div>
@@ -106,9 +106,13 @@ import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import { start } from '@popperjs/core';
+import moment from "moment";
 const route = useRoute();  // 取得當前路由資訊
 const activityId = route.params.id;
-
+const userToken = localStorage.getItem('userToken');
+import { useAuthStore } from '@/stores/auth'
+const authStore = useAuthStore()
+const vendorId = authStore.userId
 const vendorActivity = ref({
     id: null,
     name: '',
@@ -120,6 +124,63 @@ const vendorActivity = ref({
     isRegistrationRequired: ''
 });
 
+
+const checkTimeConflict = async (vendorId, startTime, endTime) => {
+    try {
+        const response = await axios.get('/api/vendor_admin/activity/checkConflict', {
+            params: { vendorId, startTime, endTime }
+        });
+        console.log(response.data)
+        if (response.data) {
+
+            return true
+        }
+    } catch (error) {
+        console.error('檢查時間衝突失敗', error);
+    }
+};
+
+const validateTimeConflict = async () => {
+    if (vendorActivity.value.startTime && vendorActivity.value.endTime) {
+        // 輸出原始的 startTime 和 endTime
+
+
+        // 將時間轉換為 SQL 支援的格式
+        const formatDate = (dateStr) => {
+            const date = new Date(dateStr);
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+            const seconds = ('0' + date.getSeconds()).slice(-2);
+
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        };
+
+        const formattedStartTime = formatDate(vendorActivity.value.startTime);
+        const formattedEndTime = formatDate(vendorActivity.value.endTime);
+
+        // 輸出轉換後的時間
+        console.log(formattedStartTime, formattedEndTime);
+
+        // 呼叫檢查時間衝突的方法，傳入轉換後的時間
+        await checkTimeConflict(vendorId, formattedStartTime, formattedEndTime);
+    }
+};
+
+
+
+
+// 取得今天的日期（不含時分秒）
+const today = new Date();
+
+// 計算是否活動已過期
+const isPast = computed(() => {
+    if (!vendorActivity.value.startTime) return true; // 防止沒有資料時錯誤
+    const activityDate = new Date(vendorActivity.value.startTime);
+    return activityDate < today;
+});
 const activityTypes = ref([]);
 const registrationOptions = ref([
     { value: 'true', label: '需要報名' },
@@ -174,10 +235,11 @@ async function fetchActivityDetail() {
         registrationOptions.value = data.registrationOptions;
         activityPeopleNumber.value = data.activityPeopleNumber;
         vendorActivityImageIdList.value = data.vendorActivityImageIdList;
-
+        console.log(vendorActivity.value.startTime, vendorActivity.value.endTime)
         // 格式化开始时间和结束时间
-        const formattedStartTime = vendorActivity.value.startTime.slice(0, 16); // 保证只显示到分钟
-        const formattedEndTime = vendorActivity.value.endTime.slice(0, 16); // 保证只显示到分钟
+        const formattedStartTime = moment(vendorActivity.value.startTime).format("YYYY-MM-DDTHH:mm");
+        const formattedEndTime = moment(vendorActivity.value.endTime).format("YYYY-MM-DDTHH:mm");
+        console.log(formattedStartTime, formattedEndTime)
         // 将格式化后的时间赋值给 Vue data
         vendorActivity.value.startTime = formattedStartTime;
         vendorActivity.value.endTime = formattedEndTime;
@@ -200,6 +262,25 @@ async function fetchActivityDetail() {
         console.error("獲取活動詳情失敗", error);
     }
 }
+const imageUrls = ref([]);
+// 下載圖片的函式
+const loadImages = () => {
+    vendorActivityImageIdList.value.forEach((imageId, index) => {
+        axios.get(`http://localhost:8080/photos/download?photoId=${imageId}`, {
+            headers: {
+                'Authorization': `Bearer ${userToken}`
+            },
+            responseType: 'blob'  // 以二進位格式下載圖片
+        })
+            .then(response => {
+                const url = URL.createObjectURL(response.data);  // 創建圖片 URL
+                imageUrls.value[index] = url;  // 更新圖片的 URL
+            })
+            .catch(error => {
+                console.error('圖片下載失敗', error);
+            });
+    });
+};
 
 // 处理文件上传预览
 function handleFileChange(event) {
@@ -215,10 +296,18 @@ function handleFileChange(event) {
 }
 
 // 删除已存在的图片
-function deleteExistingImage(imageId) {
+const deleteExistingImage = (imageId) => {
+    // 刪除已經標記為刪除的圖片 ID
     deletedImageIds.value.push(imageId);
-    vendorActivityImageIdList.value = vendorActivityImageIdList.value.filter(id => id !== imageId);
-}
+
+    // 同步更新 imageUrls 和 vendorActivityImageIdList
+    const index = vendorActivityImageIdList.value.findIndex(id => id === imageId);
+    if (index !== -1) {
+        vendorActivityImageIdList.value.splice(index, 1); // 刪除圖片 ID
+        imageUrls.value.splice(index, 1); // 同步刪除圖片 URL
+    }
+};
+
 
 // 删除预览图片
 function removePreview(index) {
@@ -249,7 +338,41 @@ function goBack() {
 }
 
 // 表单提交处理
-function submitForm() {
+const submitForm = async () => {
+
+    if (vendorActivity.value.startTime && vendorActivity.value.endTime) {
+        // 輸出原始的 startTime 和 endTime
+
+
+        // 將時間轉換為 SQL 支援的格式
+        const formatDate = (dateStr) => {
+            const date = new Date(dateStr);
+            const year = date.getFullYear();
+            const month = ('0' + (date.getMonth() + 1)).slice(-2);
+            const day = ('0' + date.getDate()).slice(-2);
+            const hours = ('0' + date.getHours()).slice(-2);
+            const minutes = ('0' + date.getMinutes()).slice(-2);
+            const seconds = ('0' + date.getSeconds()).slice(-2);
+
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        };
+
+        const formattedStartTime = formatDate(vendorActivity.value.startTime);
+        const formattedEndTime = formatDate(vendorActivity.value.endTime);
+
+        // 輸出轉換後的時間
+        console.log(formattedStartTime, formattedEndTime);
+
+        // 檢查時間衝突
+        const conflictExists = await checkTimeConflict(vendorId, formattedStartTime, formattedEndTime);
+
+        // 如果有衝突，直接返回，不提交表單
+        if (conflictExists) {
+            alert("時間有衝突，請修改時間！");
+            return;
+        }
+    }
+
     const formData = new FormData();
     formData.append('vendor_id', 1);
     formData.append('activity_id', vendorActivity.value.id);
@@ -287,7 +410,8 @@ function submitForm() {
 
 // 页面加载时初始化状态
 onMounted(async () => {
-    await fetchActivityDetail(); // ✅ 這裡可以使用 await
+    await fetchActivityDetail();
+    loadImages();// ✅ 這裡可以使用 await
     console.log(vendorActivity.value.startTime);
     toggleMaxParticipants();
 });
@@ -401,6 +525,10 @@ select {
     object-fit: cover;
     border-radius: 5px;
     border: 1px solid #ccc;
+}
+
+.btn:disabled {
+    visibility: hidden;
 }
 
 .delete-btn {
