@@ -2,37 +2,18 @@
   <!-- 幻燈片開始 -->
   <section id="banner" style="background: #f9f3ec">
     <div class="container">
-      <Swiper
-        style="height: 75vh"
-        direction="vertical"
-        :modules="[Pagination, Autoplay]"
-        :pagination="{ clickable: true }"
-        :autoplay="{ delay: 5000, disableOnInteraction: false }"
-      >
+      <Swiper style="height: 75vh" direction="vertical" :modules="[Pagination, Autoplay]"
+        :pagination="{ clickable: true }" :autoplay="{ delay: 5000, disableOnInteraction: false }">
         <SwiperSlide v-for="(slide, index) in activityList" :key="index" class="py-5">
           <div class="row banner-content align-items-center">
             <div class="img-wrapper col-md-5" style="text-align: center">
-              <span v-if="slide.vendor.logoImgBase64"
-                ><img
-                  :src="slide.vendor.logoImgBase64"
-                  class="img-fluid"
-                  alt="image"
-                  width="300"
-                  style="margin-bottom: 15px"
-              /></span>
-              <span v-else
-                ><img
-                  src="/user_static/images/tool/no-photo.png"
-                  class="img-fluid"
-                  alt="image"
-                  width="300"
-                  style="margin-bottom: 15px"
-              /></span>
+              <span v-if="slide.vendor.logoImgBase64"><img :src="slide.vendor.logoImgBase64" class="img-fluid"
+                  alt="image" width="300" style="margin-bottom: 15px" /></span>
+              <span v-else><img src="/user_static/images/tool/no-photo.png" class="img-fluid" alt="image" width="300"
+                  style="margin-bottom: 15px" /></span>
               <h3>
-                主辦店家：<a :href="`/vendor/detail/${slide.vendor.id}`"
-                  ><span v-if="slide.vendor.name">{{ slide.vendor.name }}</span
-                  ><span v-else style="gray">無店家名稱</span></a
-                >
+                主辦店家：<a :href="`/vendor/detail/${slide.vendor.id}`"><span v-if="slide.vendor.name">{{ slide.vendor.name
+                }}</span><span v-else style="gray">無店家名稱</span></a>
               </h3>
             </div>
             <div class="content-wrapper col-md-7 p-5 mb-5">
@@ -43,11 +24,8 @@
                 {{ slide.name }}
               </h2>
               <div class="d-flex">
-                <a
-                  :href="`/activity/detail/${slide.id}`"
-                  class="btn btn-outline-dark btn-lg text-uppercase fs-4 rounded-1 me-4"
-                  :style="{ marginTop: '30px' }"
-                >
+                <a :href="`/activity/detail/${slide.id}`"
+                  class="btn btn-outline-dark btn-lg text-uppercase fs-4 rounded-1 me-4" :style="{ marginTop: '30px' }">
                   前往活動
                   <svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
                     <use xlink:href="#arrow-right"></use>
@@ -71,14 +49,9 @@
       <div class="mb-4 mb-md-0">
         <p class="m-0">
           <!-- 篩選按鈕開始 -->
-          <span style="margin-right: 20px">類別：</span>
-          <button
-            v-for="filter in filters"
-            :key="filter.id"
-            class="filter-button me-4"
-            :class="{ active: activeFilter === filter.id }"
-            @click="setFilter(filter.id)"
-          >
+          <span style="margin-right:20px">類別：</span>
+          <button v-for="filter in filters" :key="filter.id" class="filter-button me-4"
+            :class="{ active: activeFilter === filter.id }" @click="setFilter(filter.id)">
             <!-- activeFilter === filter.id 為用來判斷active為true或false -->
 
             {{ filter.name }}
@@ -101,21 +74,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="(activity, index) in filteredActivities"
-            :key="index"
-            :class="['item', activity.id, 'col-md-4', 'col-lg-3', 'my-4']"
-          >
+          <tr v-for="(activity, index) in filteredActivities" :key="index"
+            :class="['item', activity.id, 'col-md-4', 'col-lg-3', 'my-4']">
             <th scope="row">{{ index + 1 }}</th>
             <td>
               <a :href="`/activity/detail/${activity.id}`">{{ activity.name }}</a>
             </td>
             <td>{{ activity.activityType.name }}</td>
             <td>
-              <a :href="`/vendor/detail/${activity.vendor.id}`"
-                ><span v-if="activity.vendor.name">{{ activity.vendor.name }}</span>
-                <span v-else style="color: #c0c0c0">無店家名稱</span></a
-              >
+              <a :href="`/vendor/detail/${activity.vendor.id}`"><span v-if="activity.vendor.name">{{
+                activity.vendor.name }}</span>
+                <span v-else style="color: #c0c0c0">無店家名稱</span></a>
             </td>
             <td>{{ formatDate(activity.startTime) }}</td>
             <td>{{ formatDate(activity.endTime) }}</td>
@@ -147,7 +116,7 @@ const shuffleList = (array) => {
 const activityList = ref([])
 const fetchActivityList = async () => {
   try {
-    const response = await fetch(`http://localhost:8080/api/activity/all`)
+    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/all`)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
 
     const data = await response.json()
@@ -164,7 +133,7 @@ const filters = ref([])
 
 const fetchActivityType = async () => {
   try {
-    const response = await fetch(`http://localhost:8080/api/activity/type/show`)
+    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/type/show`)
 
     const data = await response.json()
     filters.value = filters.value = [

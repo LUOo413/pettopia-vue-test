@@ -34,7 +34,7 @@
                   <td>
                     <a :href="`/activity/detail/${like.vendorActivity.id}`">{{
                       like.vendorActivity.name
-                    }}</a>
+                      }}</a>
                   </td>
                   <td>{{ like.vendorActivity.activityType.name }}</td>
                   <td>{{ formatReviewDate(like.vendorActivity.startTime) }}</td>
@@ -67,7 +67,7 @@
                   <td>
                     <a :href="`/activity/detail/${review.vendorActivity.id}`">{{
                       review.vendorActivity.name
-                    }}</a>
+                      }}</a>
                   </td>
 
                   <!-- 判斷是否在編輯模式 -->
@@ -82,37 +82,22 @@
                   <td>
                     <!-- 編輯模式 -->
                     <template v-if="editIndex === index">
-                      <button
-                        class="btn btn-success btn-sm"
-                        @click="confirmEdit(review.id, editedContent, index)"
-                      >
+                      <button class="btn btn-success btn-sm" @click="confirmEdit(review.id, editedContent, index)">
                         確認
                       </button>
-                      <button
-                        class="btn btn-secondary btn-sm"
-                        @click="cancelEdit"
-                        style="margin-left: 5px"
-                      >
+                      <button class="btn btn-secondary btn-sm" @click="cancelEdit" style="margin-left: 5px">
                         取消
                       </button>
                     </template>
                     <!-- 編輯模式 -->
 
                     <!-- 非編輯模式 -->
-                    <button
-                      v-else
-                      class="btn btn-primary btn-sm"
-                      @click="editReview(index, review.reviewContent)"
-                    >
+                    <button v-else class="btn btn-primary btn-sm" @click="editReview(index, review.reviewContent)">
                       修改
                     </button>
                     <!-- 非編輯模式 -->
 
-                    <button
-                      class="btn btn-danger btn-sm"
-                      @click="deleteReview(review.id)"
-                      style="margin-left: 10px"
-                    >
+                    <button class="btn btn-danger btn-sm" @click="deleteReview(review.id)" style="margin-left: 10px">
                       刪除
                     </button>
                   </td>
@@ -141,17 +126,14 @@
                   <td>
                     <a :href="`/activity/detail/${registration.vendorActivity.id}`">{{
                       registration.vendorActivity.name
-                    }}</a>
+                      }}</a>
                   </td>
                   <td>{{ formatReviewDate(registration.registrationTime) }}</td>
                   <td v-if="registration.status == 'confirmed'">成功</td>
                   <td v-else>審核中</td>
 
                   <td>
-                    <button
-                      class="btn btn-danger btn-sm"
-                      @click="deleteRegistration(registration.id)"
-                    >
+                    <button class="btn btn-danger btn-sm" @click="deleteRegistration(registration.id)">
                       取消
                     </button>
                   </td>
@@ -262,7 +244,7 @@ const registrationList = ref([
 /* 1. 獲取收藏列表 */
 const fetchActivityLike = async () => {
   try {
-    const response = await fetch(`http://localhost:8080/api/activity/member/${memberId.value}/like`)
+    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/member/${memberId.value}/like`)
 
     const data = await response.json()
     likeList.value = data
@@ -276,7 +258,7 @@ onMounted(fetchActivityLike)
 const fetchActivityReview = async () => {
   try {
     const response = await fetch(
-      `http://localhost:8080/api/activity/member/${memberId.value}/review`
+      `https://pettopia-1743656430689.azurewebsites.net/api/activity/member/${memberId.value}/review`
     )
 
     const data = await response.json()
@@ -291,7 +273,7 @@ onMounted(fetchActivityReview)
 const fetchActivityRegistration = async () => {
   try {
     const response = await fetch(
-      `http://localhost:8080/api/activity/member/${memberId.value}/registration`
+      `https://pettopia-1743656430689.azurewebsites.net/api/activity/member/${memberId.value}/registration`
     )
 
     const data = await response.json()
@@ -318,7 +300,7 @@ const deleteLike = async (likeId) => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8080/api/activity/like/${likeId}/delete`, {
+    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/like/${likeId}/delete`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -363,7 +345,7 @@ const confirmEdit = async (reviewId, content, index) => {
   })
 
   try {
-    const response = await fetch(`http://localhost:8080/api/activity/review/${reviewId}/rewrite`, {
+    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/review/${reviewId}/rewrite`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(review.value),
@@ -410,7 +392,7 @@ const deleteReview = async (reviewId) => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8080/api/activity/review/${reviewId}/delete`, {
+    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/review/${reviewId}/delete`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -440,7 +422,7 @@ const deleteRegistration = async (registrationId) => {
 
   try {
     const response = await fetch(
-      `http://localhost:8080/api/activity/registration/${registrationId}/delete`,
+      `https://pettopia-1743656430689.azurewebsites.net/api/activity/registration/${registrationId}/delete`,
       {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
@@ -526,7 +508,8 @@ const switchRegistrationPage = () => {
 .main-container {
   position: relative;
   flex: 1;
-  min-width: 0; /* 防止flex子項溢出 */
+  min-width: 0;
+  /* 防止flex子項溢出 */
   background: rgba(255, 255, 255, 0.95);
   padding: 2rem;
   border-radius: 10px;

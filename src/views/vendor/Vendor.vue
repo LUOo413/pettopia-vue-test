@@ -2,27 +2,15 @@
   <!-- 幻燈片開始 -->
   <section id="banner" style="background: #f9f3ec">
     <div class="container">
-      <Swiper
-        :modules="[Pagination, Autoplay]"
-        :pagination="{ clickable: true }"
-        :autoplay="{ delay: 5000, disableOnInteraction: false }"
-      >
+      <Swiper :modules="[Pagination, Autoplay]" :pagination="{ clickable: true }"
+        :autoplay="{ delay: 5000, disableOnInteraction: false }">
         <SwiperSlide v-for="(vendor, index) in vendorList" :key="index" class="py-5">
           <div class="row banner-content align-items-center">
             <div class="img-wrapper col-md-5">
-              <span v-if="vendor.logoImgBase64"
-                ><img
-                  :src="vendor.logoImgBase64"
-                  class="img-fluid rounded-4"
-                  alt="image"
-                  width="500" /></span
-              ><span v-else>
-                <img
-                  src="/user_static/images/tool/no-photo.png"
-                  alt="店家圖片"
-                  class="img-fluid rounded-4"
-                  width="500"
-              /></span>
+              <span v-if="vendor.logoImgBase64"><img :src="vendor.logoImgBase64" class="img-fluid rounded-4" alt="image"
+                  width="500" /></span><span v-else>
+                <img src="/user_static/images/tool/no-photo.png" alt="店家圖片" class="img-fluid rounded-4"
+                  width="500" /></span>
             </div>
             <div class="content-wrapper col-md-7 p-5 mb-5">
               <h2 class="banner-title display-2 fw-normal">
@@ -33,11 +21,8 @@
                 {{ vendor.description }}
               </div>
               <div class="d-flex">
-                <a
-                  :href="`/vendor/detail/${vendor.id}`"
-                  class="btn btn-outline-dark btn-lg text-uppercase fs-4 rounded-1 me-4"
-                  style="margin-top: 0px"
-                >
+                <a :href="`/vendor/detail/${vendor.id}`"
+                  class="btn btn-outline-dark btn-lg text-uppercase fs-4 rounded-1 me-4" style="margin-top: 0px">
                   前往店家
                   <svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
                     <use xlink:href="#arrow-right"></use>
@@ -50,16 +35,11 @@
 
               <div style="font-size: 28px; margin-top: 20px">活動列表：</div>
               <ul>
-                <li
-                  v-for="(activity, index) in vendor.activityDtoList"
-                  :key="index"
-                  style="font-size: 24px; margin-top: 30px"
-                >
+                <li v-for="(activity, index) in vendor.activityDtoList" :key="index"
+                  style="font-size: 24px; margin-top: 30px">
                   {{ activity.activityName }} &nbsp;
-                  <a
-                    :href="`/activity/detail/${activity.activityId}`"
-                    class="btn btn-outline-dark btn-lg text-uppercase rounded-1 me-4"
-                  >
+                  <a :href="`/activity/detail/${activity.activityId}`"
+                    class="btn btn-outline-dark btn-lg text-uppercase rounded-1 me-4">
                     <svg width="24" height="24" viewBox="0 0 24 24" class="mb-1">
                       <use xlink:href="#arrow-right"></use>
                     </svg>
@@ -108,7 +88,7 @@ const vendorList = ref([
 ])
 const fetchVendorList = async () => {
   try {
-    const response = await fetch(`http://localhost:8080/api/vendor/all/for/swiper`)
+    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/all/for/swiper`)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
 
     const data = await response.json()

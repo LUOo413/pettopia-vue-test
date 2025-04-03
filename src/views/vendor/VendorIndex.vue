@@ -27,13 +27,8 @@
         <p class="m-0">
           <!-- 篩選按鈕開始 -->
           <span style="margin-right: 10px">類別：</span>
-          <button
-            v-for="filter in filters"
-            :key="filter.id"
-            class="filter-button me-4"
-            :class="{ active: activeFilter === filter.id }"
-            @click="setFilter(filter.id)"
-          >
+          <button v-for="filter in filters" :key="filter.id" class="filter-button me-4"
+            :class="{ active: activeFilter === filter.id }" @click="setFilter(filter.id)">
             <!-- activeFilter === filter.id 為用來判斷active為true或false -->
 
             {{ filter.name }}
@@ -43,22 +38,15 @@
       </div>
 
       <div class="row">
-        <div
-          v-for="vendor in filteredVendors"
-          :key="vendor.id"
-          :class="['item', vendor.id, 'col-md-4', 'col-lg-3', 'my-4']"
-        >
+        <div v-for="vendor in filteredVendors" :key="vendor.id"
+          :class="['item', vendor.id, 'col-md-4', 'col-lg-3', 'my-4']">
           <div class="card position-relative">
             <a :href="`/vendor/detail/${vendor.id}`">
               <span v-if="vendor.logoImgBase64">
                 <img :src="vendor.logoImgBase64" class="img-fluid rounded-4" alt="店家圖片" />
               </span>
               <span v-else>
-                <img
-                  src="/user_static/images/tool/no-photo.png"
-                  class="img-fluid rounded-4"
-                  alt="店家圖片"
-                />
+                <img src="/user_static/images/tool/no-photo.png" class="img-fluid rounded-4" alt="店家圖片" />
               </span>
             </a>
             <div class="card-body p-0">
@@ -94,7 +82,7 @@ const shuffleList = (array) => {
 const vendorList = ref([])
 const fetchVendorList = async () => {
   try {
-    const response = await fetch(`http://localhost:8080/api/vendor/all`)
+    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/all`)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
 
     const data = await response.json()
@@ -111,7 +99,7 @@ const filters = ref([])
 
 const fetchVendorCategory = async () => {
   try {
-    const response = await fetch(`http://localhost:8080/api/vendor/category/show`)
+    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/category/show`)
 
     const data = await response.json()
     filters.value = filters.value = [
@@ -160,7 +148,7 @@ const coordinate = ref([
 
 const fetchCoordinate = async () => {
   try {
-    const response = await fetch(`http://localhost:8080/api/vendor/all/coordinate`, {
+    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/all/coordinate`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -277,7 +265,7 @@ const findCoordinateByKeyword = async () => {
   }
 
   try {
-    const response = await fetch(`http://localhost:8080/api/vendor/coordinate/find`, {
+    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/coordinate/find`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
