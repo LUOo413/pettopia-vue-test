@@ -15,29 +15,17 @@
                 <div class="verification-form mt-3">
                   <div class="form-group mb-3">
                     <label for="verificationCode">請輸入驗證碼</label>
-                    <input 
-                      type="text" 
-                      class="form-control" 
-                      id="verificationCode" 
-                      v-model="verificationCode" 
-                      placeholder="請輸入6位數驗證碼"
-                      maxlength="6"
-                    >
+                    <input type="text" class="form-control" id="verificationCode" v-model="verificationCode"
+                      placeholder="請輸入6位數驗證碼" maxlength="6">
                   </div>
-                  <button 
-                    class="btn btn-primary w-100 mb-3" 
-                    @click="verifyEmail"
-                    :disabled="!verificationCode">
+                  <button class="btn btn-primary w-100 mb-3" @click="verifyEmail" :disabled="!verificationCode">
                     驗證
                   </button>
                 </div>
                 <hr>
                 <p class="mb-0">
                   沒收到驗證信？
-                  <button 
-                    class="btn btn-link p-0" 
-                    @click="resendVerification" 
-                    :disabled="countdown > 0">
+                  <button class="btn btn-link p-0" @click="resendVerification" :disabled="countdown > 0">
                     重新發送
                   </button>
                 </p>
@@ -82,11 +70,11 @@
               </div>
 
               <div class="divider"><span>或</span></div>
-              
+
               <a href="/oauth2/authorization/google" class="social-btn">
-                <img src="/user_static/icon/Google_icon.png" alt="Google"> 使用   Google   註冊
+                <img src="/user_static/icon/Google_icon.png" alt="Google"> 使用 Google 註冊
               </a>
-              
+
               <a href="/oauth2/authorization/facebook" class="social-btn">
                 <img src="/user_static/icon/Facebook_icon.png" alt="Facebook"> 使用 Facebook 註冊
               </a>
@@ -132,14 +120,14 @@ export default {
         }
       }, 1000);
     },
-    
+
     // 開始跳轉倒計時的方法
     startRedirectCountdown() {
       this.countdownSeconds = 2;
       if (this.countdownTimer) {
         clearInterval(this.countdownTimer);
       }
-      
+
       this.countdownTimer = setInterval(() => {
         if (this.countdownSeconds > 0) {
           this.countdownSeconds--;
@@ -177,7 +165,7 @@ export default {
 
         console.log('準備發送註冊請求，完整數據:', JSON.stringify(registerData, null, 2));
 
-        const response = await fetch('/api/auth/register', {
+        const response = await fetch('https://vmtest-1-w8r3.onrender.com/api/auth/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -186,7 +174,7 @@ export default {
         });
 
         console.log('服務器響應狀態:', response.status);
-        
+
         // 檢查響應內容類型
         const contentType = response.headers.get('content-type');
         let data;
@@ -229,7 +217,7 @@ export default {
     },
     async verifyEmail() {
       try {
-        const response = await fetch('/api/auth/verify-code', {
+        const response = await fetch('https://vmtest-1-w8r3.onrender.com/api/auth/verify-code', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -257,7 +245,7 @@ export default {
     },
     async resendVerification() {
       try {
-        const response = await fetch('/api/auth/send-verification', {
+        const response = await fetch('https://vmtest-1-w8r3.onrender.com/api/auth/send-verification', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -423,11 +411,13 @@ export default {
 }
 
 @keyframes animation {
+
   0%,
   80%,
   100% {
     box-shadow: 0 2em 0 -1em var(--accent-color, #ff6b6b);
   }
+
   40% {
     box-shadow: 0 2em 0 0 var(--accent-color, #ff6b6b);
   }
@@ -444,4 +434,4 @@ export default {
   margin-bottom: 0.5rem;
   color: #ff6b6b;
 }
-</style> 
+</style>

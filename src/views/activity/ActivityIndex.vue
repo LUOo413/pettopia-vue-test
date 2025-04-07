@@ -49,7 +49,7 @@
       <div class="mb-4 mb-md-0">
         <p class="m-0">
           <!-- 篩選按鈕開始 -->
-          <span style="margin-right:20px">類別：</span>
+          <span class="caspan">類別：</span>
           <button v-for="filter in filters" :key="filter.id" class="filter-button me-4"
             :class="{ active: activeFilter === filter.id }" @click="setFilter(filter.id)">
             <!-- activeFilter === filter.id 為用來判斷active為true或false -->
@@ -120,6 +120,7 @@ const fetchActivityList = async () => {
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
 
     const data = await response.json()
+    console.log(data)  // 查看返回的資料
     activityList.value = shuffleList(data)
   } catch (error) {
     console.error('獲取活動清單失敗:', error)
@@ -183,5 +184,9 @@ const formatDate = (dateString) => {
 .filter-button.active {
   font-weight: bold;
   border-bottom: 2px solid black;
+}
+
+.caspan {
+  margin-right: 20px;
 }
 </style>
