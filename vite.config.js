@@ -12,8 +12,8 @@ export default defineConfig({
     port: 5173,
     allowedHosts: ['6ad5-59-125-142-166.ngrok-free.app'],
     proxy: {
-      '/oauth2': 'https://pettopia-1743656430689.azurewebsites.net',
-      '/api': 'https://pettopia-1743656430689.azurewebsites.net'
+      '/oauth2': 'https://23.102.236.197:8080',
+      '/api': 'https://23.102.236.197:8080'
     }
   },
   plugins: [

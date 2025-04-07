@@ -250,7 +250,7 @@ const filteredRegisters = computed(() => {
 
 const fetchRegistration = async () => {
 
-    axios.get(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/activity/registration?activityId=${activityId}`, {
+    axios.get(`https://23.102.236.197:8080/api/vendor_admin/activity/registration?activityId=${activityId}`, {
         headers: {
             'Accept': 'application/json'
         }
@@ -543,16 +543,16 @@ const handleSubmit = async () => {
     try {
         if (operationType.value === 'confirm') {
             // 执行确认操作
-            await axios.put(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/registration/confirmById/${selectedRegister.value.id}`);
+            await axios.put(`https://23.102.236.197:8080/api/vendor_admin/registration/confirmById/${selectedRegister.value.id}`);
             selectedRegister.value.status = "confirmed";
         } else if (operationType.value === 'cancel') {
             // 执行取消操作
-            await axios.put(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/registration/cancelById/${selectedRegister.value.id}`);
+            await axios.put(`https://23.102.236.197:8080/api/vendor_admin/registration/cancelById/${selectedRegister.value.id}`);
             selectedRegister.value.status = "canceled";
         }
 
         // 发送通知
-        await axios.post(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/registration/notification/${selectedRegister.value.member.id}/${activityId}`, null, {
+        await axios.post(`https://23.102.236.197:8080/api/vendor_admin/registration/notification/${selectedRegister.value.member.id}/${activityId}`, null, {
             params: {
                 title: notificationTitle.value,   // 通知标题
                 content: notificationContent.value  // 通知内容
@@ -588,15 +588,15 @@ const handleBatchSubmit = async () => {
     try {
         const requests = selectedRegisters.value.map(async (register) => {
             if (operationType.value === 'confirm') {
-                await axios.put(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/registration/confirmById/${register.id}`);
+                await axios.put(`https://23.102.236.197:8080/api/vendor_admin/registration/confirmById/${register.id}`);
                 register.status = "confirmed";
             } else if (operationType.value === 'cancel') {
-                await axios.put(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/registration/cancelById/${register.id}`);
+                await axios.put(`https://23.102.236.197:8080/api/vendor_admin/registration/cancelById/${register.id}`);
                 register.status = "canceled";
             }
 
             // 發送通知
-            return axios.post(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/registration/notification/${register.member.id}`, null, {
+            return axios.post(`https://23.102.236.197:8080/api/vendor_admin/registration/notification/${register.member.id}`, null, {
                 params: {
                     title: notificationTitle.value,
                     content: notificationContent.value
@@ -615,7 +615,7 @@ const handleBatchSubmit = async () => {
 const deleteRegistration = async (registerId) => {
     // showModal("确定要刪除该报名吗？", async () => {
     try {
-        axios.delete(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/registration/deleteById/${registerId}`)
+        axios.delete(`https://23.102.236.197:8080/api/vendor_admin/registration/deleteById/${registerId}`)
             .then(() => {
                 // 先销毁 DataTable（如果已初始化）
                 if (dataTable) {

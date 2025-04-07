@@ -88,7 +88,7 @@ const vendorList = ref([
 ])
 const fetchVendorList = async () => {
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/all/for/swiper`)
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/all/for/swiper`)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
 
     const data = await response.json()

@@ -234,7 +234,7 @@ const submitForm = async () => {
   })
 
   axios
-    .post('https://pettopia-1743656430689.azurewebsites.net/api/vendor_activity/add', formdata)
+    .post('https://23.102.236.197:8080/api/vendor_activity/add', formdata)
     .then((response) => {
       alert('新增成功')
       window.location.reload()
@@ -301,7 +301,7 @@ function toggleMaxParticipants() {
 // 設定開始時間不能選過去的日期和結束時間不能早於開始時間
 onMounted(() => {
   axios
-    .get('https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/activity/allTypes') // 確保端點正確
+    .get('https://23.102.236.197:8080/api/vendor_admin/activity/allTypes') // 確保端點正確
     .then((response) => {
       activityTypes.value = response.data
     })

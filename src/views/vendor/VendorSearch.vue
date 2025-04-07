@@ -85,7 +85,7 @@ const searchVendor = async (keyword) => {
   formData.append("keyword", keyword);
 
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/find`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/find`, {
       method: "POST",
       body: formData,
     });
@@ -129,7 +129,7 @@ const openCategory = async (categoryId, vendorId) => {
 
   try {
     const response = await fetch(
-      `https://pettopia-1743656430689.azurewebsites.net/api/vendor/category/${categoryId}/except/vendor/${vendorId}`,
+      `https://23.102.236.197:8080/api/vendor/category/${categoryId}/except/vendor/${vendorId}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },

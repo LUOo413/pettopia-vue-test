@@ -9,9 +9,9 @@
             <Swiper :modules="[Pagination, Navigation]" :pagination="{
               clickable: true,
             }" :navigation="{
-                nextEl: '.custom-next',
-                prevEl: '.custom-prev',
-              }">
+              nextEl: '.custom-next',
+              prevEl: '.custom-prev',
+            }">
               <SwiperSlide v-for="(image, index) in activityImageList" :key="index" class="thumbnail" width="400"
                 @click="openImage(image.imageBase64)">
                 <div style="display: flex; justify-content: center; align-items: center">
@@ -46,7 +46,7 @@
             主辦店家：<span style="margin: 5px" v-if="activity.vendor.logoImgBase64">
               <img :src="activity.vendor.logoImgBase64" alt="店家圖片" class="img-fluid rounded-4" width="30" /></span><a
               :href="`/vendor/detail/${activity.vendor.id}`" v-if="activity.vendor.name"><b>{{ activity.vendor.name
-                }}</b></a><a :href="`/vendor/detail/${activity.vendor.id}`" v-else style="color: gray"><b>( 無店家名稱
+              }}</b></a><a :href="`/vendor/detail/${activity.vendor.id}`" v-else style="color: gray"><b>( 無店家名稱
                 )</b></a>
           </p>
           <p>
@@ -185,7 +185,7 @@
           <td>{{ activity.activityType.name }}</td>
           <td>
             <a :href="`/vendor/detail/${activity.vendor.id}`"><span v-if="activity.vendor.name">{{ activity.vendor.name
-                }}</span>
+            }}</span>
               <span v-else style="color: #c0c0c0">無店家名稱</span></a>
           </td>
           <td>{{ formatReviewDate(activity.startTime) }}</td>
@@ -409,7 +409,7 @@ const activity = ref({
 })
 const fetchActivityData = async () => {
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}`)
+    const response = await fetch(`https://23.102.236.197:8080/api/activity/${props.activityId}`)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
 
     const data = await response.json()
@@ -425,7 +425,7 @@ const activityImageList = ref({ id: '', imageBase64: '' })
 
 const fetchActivityImageList = async () => {
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/image`)
+    const response = await fetch(`https://23.102.236.197:8080/api/activity/${props.activityId}/image`)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
 
     const data = await response.json()
@@ -441,7 +441,7 @@ const reviewList = ref([])
 
 const fetchReviewList = async () => {
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/review`)
+    const response = await fetch(`https://23.102.236.197:8080/api/activity/${props.activityId}/review`)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
 
     const data = await response.json()
@@ -458,7 +458,7 @@ const activityList = ref([])
 const fetchActivityList = async () => {
   try {
     const response = await fetch(
-      `https://pettopia-1743656430689.azurewebsites.net/api/activity/all/except/${props.activityId}`
+      `https://23.102.236.197:8080/api/activity/all/except/${props.activityId}`
     )
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
 
@@ -476,7 +476,7 @@ const activityForNumberOfVisitor = ref([])
 const increaseNumberOfVisitor = async () => {
   try {
     const response = await fetch(
-      `https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/increase/number/visitor`
+      `https://23.102.236.197:8080/api/activity/${props.activityId}/increase/number/visitor`
     )
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
     const data = await response.json()
@@ -494,7 +494,7 @@ const maxPeople = ref()
 const getActivityPeople = async () => {
   try {
     const response = await fetch(
-      `https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/registration/people/number`
+      `https://23.102.236.197:8080/api/activity/${props.activityId}/registration/people/number`
     )
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
     const data = await response.json()
@@ -512,7 +512,7 @@ const isAddReviewDisabled = ref(false)
 
 const getReviewIsExisied = async () => {
   const response = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/member/${memberId}/review/exist`,
+    `https://23.102.236.197:8080/api/activity/${props.activityId}/member/${memberId}/review/exist`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -564,7 +564,7 @@ const isAvalible = ref(true)
 const isActivityAvalible = async () => {
   // 判斷人數是否達上限，達到上限true，未達上限true
   const response1 = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/registration/status`,
+    `https://23.102.236.197:8080/api/activity/${props.activityId}/registration/status`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -574,7 +574,7 @@ const isActivityAvalible = async () => {
 
   // 判斷報名狀態
   const response2 = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/member/${memberId}/regist/status`,
+    `https://23.102.236.197:8080/api/activity/${props.activityId}/member/${memberId}/regist/status`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -593,7 +593,7 @@ onMounted(isActivityAvalible)
 
 const getRegistractionStatus = async () => {
   const response = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/member/${memberId}/regist/status`,
+    `https://23.102.236.197:8080/api/activity/${props.activityId}/member/${memberId}/regist/status`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -622,7 +622,7 @@ const registActivityConfirm = async () => {
   }
 
   const response = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/member/${memberId}/regist/status`,
+    `https://23.102.236.197:8080/api/activity/${props.activityId}/member/${memberId}/regist/status`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -665,7 +665,7 @@ const registActivity = async () => {
     memberId: memberId,
   }
 
-  const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/regist`, {
+  const response = await fetch(`https://23.102.236.197:8080/api/activity/${props.activityId}/regist`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -712,7 +712,7 @@ const openRegistrationConditon = async () => {
   isPopupConditionVisible.value = true
 
   const response1 = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/registration/pending`,
+    `https://23.102.236.197:8080/api/activity/${props.activityId}/registration/pending`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -721,7 +721,7 @@ const openRegistrationConditon = async () => {
   pendingList.value = await response1.json()
 
   const response2 = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/registration/confirmed`,
+    `https://23.102.236.197:8080/api/activity/${props.activityId}/registration/confirmed`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -738,7 +738,7 @@ const likeStatus = ref('收藏')
 
 const getLikeStatus = async () => {
   const response = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/member/${memberId}/like/status`,
+    `https://23.102.236.197:8080/api/activity/${props.activityId}/member/${memberId}/like/status`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -771,7 +771,7 @@ const toggleLike = async () => {
   }
 
   const response = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/like/toggle`,
+    `https://23.102.236.197:8080/api/activity/${props.activityId}/like/toggle`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -849,7 +849,7 @@ const submitComment = async () => {
 
   try {
     const response = await fetch(
-      `https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/review/add`,
+      `https://23.102.236.197:8080/api/activity/${props.activityId}/review/add`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -887,7 +887,7 @@ const openRewirte = async (reviewId) => {
   reviewIdForRewrite.value = reviewId
 
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/review/${reviewId}`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/activity/review/${reviewId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -913,7 +913,7 @@ const submitRewrite = async (reviewId) => {
   }
 
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/review/${reviewId}/rewrite`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/activity/review/${reviewId}/rewrite`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(commentForm.value),
@@ -956,7 +956,7 @@ const deleteComment = async (reviewId) => {
   }
 
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/review/${reviewId}/delete`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/activity/review/${reviewId}/delete`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -1003,7 +1003,7 @@ const openMember = async () => {
   isPopupMemberVisible.value = true
 
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/${props.activityId}/like`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/activity/${props.activityId}/like`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -1042,7 +1042,7 @@ watch(isPopupTypeVisible, (newValue) => {
 
 const fetchSameTypeActivitiesExceptOne = async (typeId) => {
   const response = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/activity/type/${typeId}/except/activity/${props.activityId}`,
+    `https://23.102.236.197:8080/api/activity/type/${typeId}/except/activity/${props.activityId}`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },

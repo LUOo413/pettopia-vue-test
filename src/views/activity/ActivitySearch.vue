@@ -107,7 +107,7 @@ const searchActivity = async (keyword) => {
   keywordForApi.value = { keyword: keyword }
 
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/find`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/activity/find`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(keywordForApi.value),
@@ -150,7 +150,7 @@ const isPopupTypeVisible = ref(false)
 
 const fetchSameTypeActivitiesExceptOne = async (typeId, activityId) => {
   const response = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/activity/type/${typeId}/except/activity/${activityId}`,
+    `https://23.102.236.197:8080/api/activity/type/${typeId}/except/activity/${activityId}`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },

@@ -345,7 +345,7 @@ const updateVendor = async () => {
     formData.append('vendorLogoImg', logoInput.files[0])
   }
   console.log('formData', formData)
-  const url = `https://pettopia-1743656430689.azurewebsites.net/api/vendor/update/${vendor.value.id}`
+  const url = `https://23.102.236.197:8080/api/vendor/update/${vendor.value.id}`
   try {
     const response = await axios.post(url, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -371,7 +371,7 @@ onMounted(async () => {
   try {
     const email = encodeURIComponent('1234@gmail.com') // 將 email 編碼
     const password = '1234'
-    const url = `https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/profile?id=${vendor.value.id}` //mail的@會跑掉，所以後端先改用id
+    const url = `https://23.102.236.197:8080/api/vendor_admin/profile?id=${vendor.value.id}` //mail的@會跑掉，所以後端先改用id
 
     // 獲取商家資料和類別
     const response = await axios.get(url, {
@@ -406,7 +406,7 @@ onMounted(async () => {
   }
 
   try {
-    const url = `https://pettopia-1743656430689.azurewebsites.net/profile_photos/ids?vendorId=${vendor.value.id}`
+    const url = `https://23.102.236.197:8080/profile_photos/ids?vendorId=${vendor.value.id}`
     const response = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -418,7 +418,7 @@ onMounted(async () => {
       vendorImages.value = await Promise.all(
         response.data.map(async (imageId) => {
           try {
-            const imageResponse = await axios.get(`https://pettopia-1743656430689.azurewebsites.net/profile_photos/download?photoId=${imageId}`, {
+            const imageResponse = await axios.get(`https://23.102.236.197:8080/profile_photos/download?photoId=${imageId}`, {
               headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
               },
@@ -438,7 +438,7 @@ onMounted(async () => {
   }
 
   // 假設你有一個 API 請求來獲取標語
-  axios.get(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/${vendor.value.id}/slogans`, {
+  axios.get(`https://23.102.236.197:8080/api/vendor/${vendor.value.id}/slogans`, {
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('token')}`
     }

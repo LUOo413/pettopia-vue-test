@@ -34,7 +34,7 @@
                   <td>
                     <a :href="`/activity/detail/${like.vendorActivity.id}`">{{
                       like.vendorActivity.name
-                      }}</a>
+                    }}</a>
                   </td>
                   <td>{{ like.vendorActivity.activityType.name }}</td>
                   <td>{{ formatReviewDate(like.vendorActivity.startTime) }}</td>
@@ -67,7 +67,7 @@
                   <td>
                     <a :href="`/activity/detail/${review.vendorActivity.id}`">{{
                       review.vendorActivity.name
-                      }}</a>
+                    }}</a>
                   </td>
 
                   <!-- 判斷是否在編輯模式 -->
@@ -126,7 +126,7 @@
                   <td>
                     <a :href="`/activity/detail/${registration.vendorActivity.id}`">{{
                       registration.vendorActivity.name
-                      }}</a>
+                    }}</a>
                   </td>
                   <td>{{ formatReviewDate(registration.registrationTime) }}</td>
                   <td v-if="registration.status == 'confirmed'">成功</td>
@@ -244,7 +244,7 @@ const registrationList = ref([
 /* 1. 獲取收藏列表 */
 const fetchActivityLike = async () => {
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/member/${memberId.value}/like`)
+    const response = await fetch(`https://23.102.236.197:8080/api/activity/member/${memberId.value}/like`)
 
     const data = await response.json()
     likeList.value = data
@@ -258,7 +258,7 @@ onMounted(fetchActivityLike)
 const fetchActivityReview = async () => {
   try {
     const response = await fetch(
-      `https://pettopia-1743656430689.azurewebsites.net/api/activity/member/${memberId.value}/review`
+      `https://23.102.236.197:8080/api/activity/member/${memberId.value}/review`
     )
 
     const data = await response.json()
@@ -273,7 +273,7 @@ onMounted(fetchActivityReview)
 const fetchActivityRegistration = async () => {
   try {
     const response = await fetch(
-      `https://pettopia-1743656430689.azurewebsites.net/api/activity/member/${memberId.value}/registration`
+      `https://23.102.236.197:8080/api/activity/member/${memberId.value}/registration`
     )
 
     const data = await response.json()
@@ -300,7 +300,7 @@ const deleteLike = async (likeId) => {
   }
 
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/like/${likeId}/delete`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/activity/like/${likeId}/delete`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -345,7 +345,7 @@ const confirmEdit = async (reviewId, content, index) => {
   })
 
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/review/${reviewId}/rewrite`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/activity/review/${reviewId}/rewrite`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(review.value),
@@ -392,7 +392,7 @@ const deleteReview = async (reviewId) => {
   }
 
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/review/${reviewId}/delete`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/activity/review/${reviewId}/delete`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -422,7 +422,7 @@ const deleteRegistration = async (registrationId) => {
 
   try {
     const response = await fetch(
-      `https://pettopia-1743656430689.azurewebsites.net/api/activity/registration/${registrationId}/delete`,
+      `https://23.102.236.197:8080/api/activity/registration/${registrationId}/delete`,
       {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },

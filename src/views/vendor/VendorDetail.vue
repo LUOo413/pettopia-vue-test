@@ -447,7 +447,7 @@
           <span v-else>
             <img src="/user_static/images/tool/no-photo.png" class="img-fluid rounded-4" alt="image"
               style="max-width: 30px; max-height: 30px; margin: 10px" /> </span><span v-if="member.name">{{ member.name
-            }}</span>
+              }}</span>
           <span v-else style="color: gray">( 無名稱 )</span>
         </div>
       </div>
@@ -559,7 +559,7 @@ const vendor = ref({
 
 const fetchVendorData = async () => {
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/${props.vendorId}`)
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/${props.vendorId}`)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`) // 確認為ok
 
     const data = await response.json()
@@ -575,7 +575,7 @@ const imageList = ref([])
 
 const fetchVendorImageList = async () => {
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/${props.vendorId}/image`)
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/${props.vendorId}/image`)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
 
     const data = await response.json()
@@ -603,7 +603,7 @@ const reviewList = ref([
 
 const fetchVendorReviewList = async () => {
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/${props.vendorId}/review`)
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/${props.vendorId}/review`)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
 
     const data = await response.json()
@@ -626,7 +626,7 @@ const vendorList = ref([
 
 const fetchVendorList = async () => {
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/all/except/${props.vendorId}`)
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/all/except/${props.vendorId}`)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
     const data = await response.json()
     vendorList.value = shuffleList(data)
@@ -642,7 +642,7 @@ const isAddReviewDisabled = ref(false)
 
 const getReviewIsExisied = async () => {
   const response = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/vendor/${props.vendorId}/member/${memberId}/review/exist`,
+    `https://23.102.236.197:8080/api/vendor/${props.vendorId}/member/${memberId}/review/exist`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -704,7 +704,7 @@ const resetHover3 = () => {
 const tagList = ref([])
 
 const getTag = async () => {
-  const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/${props.vendorId}/tag`, {
+  const response = await fetch(`https://23.102.236.197:8080/api/vendor/${props.vendorId}/tag`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   })
@@ -730,7 +730,7 @@ const formatReviewDate = (dateString) => {
 const activityList = ref()
 
 const getActivities = async () => {
-  const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/activity/vendor/${props.vendorId}`, {
+  const response = await fetch(`https://23.102.236.197:8080/api/activity/vendor/${props.vendorId}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   })
@@ -745,7 +745,7 @@ const likeStatus = ref('收藏')
 
 const getLikeStatus = async () => {
   const response = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/vendor/${props.vendorId}/member/${memberId}/like/status`,
+    `https://23.102.236.197:8080/api/vendor/${props.vendorId}/member/${memberId}/like/status`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -777,7 +777,7 @@ const toggleLike = async () => {
     memberId: memberId,
   }
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/${props.vendorId}/like/toggle`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/${props.vendorId}/like/toggle`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
@@ -916,7 +916,7 @@ const submitReviewFinal = async () => {
   })
 
   try {
-    await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/${props.vendorId}/review/add/final`, {
+    await fetch(`https://23.102.236.197:8080/api/vendor/${props.vendorId}/review/add/final`, {
       method: 'POST',
       body: formData,
     })
@@ -959,7 +959,7 @@ const openRewrite = async (reviewId) => {
   rewriteButton.value = true
   rewriteReviewId.value = reviewId
 
-  const response1 = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/review/${reviewId}`, {
+  const response1 = await fetch(`https://23.102.236.197:8080/api/vendor/review/${reviewId}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   })
@@ -969,7 +969,7 @@ const openRewrite = async (reviewId) => {
   rating2.value = result1.review.ratingPrice
   rating3.value = result1.review.ratingService
 
-  const response2 = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/review/${reviewId}/photo`, {
+  const response2 = await fetch(`https://23.102.236.197:8080/api/vendor/review/${reviewId}/photo`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   })
@@ -1004,7 +1004,7 @@ const submitRewirte = async () => {
 
   try {
     const response = await fetch(
-      `https://pettopia-1743656430689.azurewebsites.net/api/vendor/review/${rewriteReviewId.value}/rewrite/final`,
+      `https://23.102.236.197:8080/api/vendor/review/${rewriteReviewId.value}/rewrite/final`,
       {
         method: 'PUT',
         body: formData,
@@ -1044,7 +1044,7 @@ const deleteComment = async (reviewId) => {
   }
 
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/review/${reviewId}/delete`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/review/${reviewId}/delete`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -1082,7 +1082,7 @@ const resetComment = async () => {
   }
 
   const response1 = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/vendor/review/${rewriteReviewId.value}`,
+    `https://23.102.236.197:8080/api/vendor/review/${rewriteReviewId.value}`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -1095,7 +1095,7 @@ const resetComment = async () => {
   rating3.value = result1.review.ratingService
 
   const response2 = await fetch(
-    `https://pettopia-1743656430689.azurewebsites.net/api/vendor/review/${rewriteReviewId.value}/photo`,
+    `https://23.102.236.197:8080/api/vendor/review/${rewriteReviewId.value}/photo`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -1132,7 +1132,7 @@ const openMember = async () => {
   isPopupMemberVisible.value = true
 
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/${props.vendorId}/like`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/${props.vendorId}/like`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -1174,7 +1174,7 @@ const openCategory = async (categoryId) => {
 
   try {
     const response = await fetch(
-      `https://pettopia-1743656430689.azurewebsites.net/api/vendor/category/${categoryId}/except/vendor/${props.vendorId}`,
+      `https://23.102.236.197:8080/api/vendor/category/${categoryId}/except/vendor/${props.vendorId}`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -1205,7 +1205,7 @@ watch(isRateVisible, (newValue) => {
 const fetchAvgRate = async () => {
   try {
     const response = await fetch(
-      `https://pettopia-1743656430689.azurewebsites.net/api/vendor/${props.vendorId}/update/rating`,
+      `https://23.102.236.197:8080/api/vendor/${props.vendorId}/update/rating`,
       {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
@@ -1241,7 +1241,7 @@ const coordinate = ref({
 })
 const fetchCoordinate = async () => {
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/${props.vendorId}/coordinate`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/${props.vendorId}/coordinate`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })

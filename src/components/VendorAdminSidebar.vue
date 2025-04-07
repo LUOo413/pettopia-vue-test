@@ -107,7 +107,7 @@ watch(() => route.path, (newPath, oldPath) => {
 
 onMounted(async () => {
     try {
-        const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/status/${userId}`); // 假設你的 API 端點
+        const response = await fetch(`https://23.102.236.197:8080/api/vendor_admin/status/${userId}`); // 假設你的 API 端點
         const data = await response.json();
         vendorStatus.value = data.status; // 假設 API 回傳 { status: true }
 

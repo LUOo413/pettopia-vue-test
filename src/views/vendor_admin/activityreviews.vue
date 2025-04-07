@@ -28,7 +28,7 @@ const props = defineProps({
 
 const loadReviews = async () => {
     try {
-        const response = await axios.get(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/activityreviews?vendorActivityId=${props.activity.id}`, { headers: { 'Accept': 'application/json' } });
+        const response = await axios.get(`https://23.102.236.197:8080/api/vendor_admin/activityreviews?vendorActivityId=${props.activity.id}`, { headers: { 'Accept': 'application/json' } });
         props.reviews[props.activity.id] = response.data;
     } catch (error) {
         console.error('Error fetching reviews:', error);
@@ -37,7 +37,7 @@ const loadReviews = async () => {
 
 const deleteReview = async (reviewId, activityId) => {
     try {
-        const response = await axios.delete(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/activityreviews/delete/${reviewId}`);
+        const response = await axios.delete(`https://23.102.236.197:8080/api/vendor_admin/activityreviews/delete/${reviewId}`);
         if (response.data.message === '刪除成功') {
             alert('刪除成功！');
             loadReviews(activityId);

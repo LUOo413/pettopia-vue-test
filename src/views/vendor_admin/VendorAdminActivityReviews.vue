@@ -86,7 +86,7 @@ const initializeDataTable = () => {
 
 const loadActivities = async () => {
     try {
-        const response = await axios.get(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/activity/${userId}`, { headers: { 'Accept': 'application/json' } });
+        const response = await axios.get(`https://23.102.236.197:8080/api/vendor_admin/activity/${userId}`, { headers: { 'Accept': 'application/json' } });
         activities.value = response.data;
         initializeDataTable()
     } catch (error) {
@@ -96,7 +96,7 @@ const loadActivities = async () => {
 
 const loadReviews = async (activityId) => {
     try {
-        const response = await axios.get(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/activityreviews?vendorActivityId=${activityId}`, { headers: { 'Accept': 'application/json' } });
+        const response = await axios.get(`https://23.102.236.197:8080/api/vendor_admin/activityreviews?vendorActivityId=${activityId}`, { headers: { 'Accept': 'application/json' } });
         reviews.value[activityId] = response.data;
     } catch (error) {
         console.error('Error fetching reviews:', error);

@@ -114,7 +114,7 @@ const stompClient = new Client({
     brokerURL: "ws://localhost:8080/chat", // WebSocket 伺服器 URL
     connectHeaders: {},
     reconnectDelay: 5000, // 斷線重連
-    webSocketFactory: () => new SockJS("https://pettopia-1743656430689.azurewebsites.net/chat"), // 使用 SockJS 連線
+    webSocketFactory: () => new SockJS("https://23.102.236.197:8080/chat"), // 使用 SockJS 連線
 });
 
 stompClient.onConnect = () => {

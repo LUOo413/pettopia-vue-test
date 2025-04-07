@@ -82,7 +82,7 @@ const shuffleList = (array) => {
 const vendorList = ref([])
 const fetchVendorList = async () => {
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/all`)
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/all`)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
 
     const data = await response.json()
@@ -99,7 +99,7 @@ const filters = ref([])
 
 const fetchVendorCategory = async () => {
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/category/show`)
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/category/show`)
 
     const data = await response.json()
     filters.value = filters.value = [
@@ -148,7 +148,7 @@ const coordinate = ref([
 
 const fetchCoordinate = async () => {
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/all/coordinate`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/all/coordinate`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -265,7 +265,7 @@ const findCoordinateByKeyword = async () => {
   }
 
   try {
-    const response = await fetch(`https://pettopia-1743656430689.azurewebsites.net/api/vendor/coordinate/find`, {
+    const response = await fetch(`https://23.102.236.197:8080/api/vendor/coordinate/find`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),

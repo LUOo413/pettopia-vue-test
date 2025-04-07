@@ -56,8 +56,8 @@
               <hr>
               <div class="photo-container">
                 <img v-for="photoId in reviewPhotos" :key="photoId"
-                  :src="`https://pettopia-1743656430689.azurewebsites.net/review_photos/download?photoId=${photoId}`"
-                  alt="Review Photo" class="review-photo" @click="showPhotoModal(photoId)">
+                  :src="`https://23.102.236.197:8080/review_photos/download?photoId=${photoId}`" alt="Review Photo"
+                  class="review-photo" @click="showPhotoModal(photoId)">
               </div>
             </div>
           </div>
@@ -104,7 +104,7 @@ const calculateAverageRating = (review) => {
 
 const fetchReviews = async () => {
   try {
-    const response = await axios.get('https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/review?vendorId=1', {
+    const response = await axios.get('https://23.102.236.197:8080/api/vendor_admin/review?vendorId=1', {
       headers: { 'Accept': 'application/json' }
     })
     ratingsData.value.reviews = response.data
@@ -217,7 +217,7 @@ const toggleReviewDetails = (review) => {
   reviewDetailVisible.value = true
 
   // 獲取評論照片
-  axios.get(`https://pettopia-1743656430689.azurewebsites.net/review_photos/ids?vendorReviewId=${review.id}`, {
+  axios.get(`https://23.102.236.197:8080/review_photos/ids?vendorReviewId=${review.id}`, {
     headers: { 'Accept': 'application/json' }
   })
     .then(response => {
@@ -230,7 +230,7 @@ const toggleReviewDetails = (review) => {
 
 // 顯示圖片放大視窗
 const showPhotoModal = (photoId) => {
-  selectedPhoto.value = `https://pettopia-1743656430689.azurewebsites.net/review_photos/download?photoId=${photoId}`
+  selectedPhoto.value = `https://23.102.236.197:8080/review_photos/download?photoId=${photoId}`
   photoModalVisible.value = true
 }
 
@@ -239,7 +239,7 @@ const deleteReview = (event, reviewId) => {
   event.stopPropagation()
   if (!confirm("確定要刪除此評論嗎？")) return
 
-  axios.delete(`https://pettopia-1743656430689.azurewebsites.net/api/vendor_admin/review/delete/${reviewId}`)
+  axios.delete(`https://23.102.236.197:8080/api/vendor_admin/review/delete/${reviewId}`)
     .then(() => {
       alert("刪除成功")
       fetchReviews() // 重新獲取評論數據
