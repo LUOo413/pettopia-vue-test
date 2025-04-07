@@ -108,7 +108,7 @@ const calculateAverageRating = (review) => {
 
 const fetchReviews = async () => {
   try {
-    const response = await axios.get(`https://23.102.236.197:8080/api/vendor_admin/review?vendorId=${userId}`, {
+    const response = await axios.get(`https://vmtest-1-w8r3.onrender.com/api/vendor_admin/review?vendorId=${userId}`, {
       headers: { 'Accept': 'application/json' }
     })
     ratingsData.value.reviews = response.data
@@ -223,7 +223,7 @@ const toggleReviewDetails = (review) => {
   reviewDetailVisible.value = true
 
   // 獲取評論照片
-  axios.get(`https://23.102.236.197:8080/review_photos/ids?vendorReviewId=${review.id}`, {
+  axios.get(`https://vmtest-1-w8r3.onrender.com/review_photos/ids?vendorReviewId=${review.id}`, {
     headers: { 'Accept': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('token')}` }
   })
     .then(async (response) => {
@@ -251,7 +251,7 @@ const toggleReviewDetails = (review) => {
 
 async function getImageSrc(photoId) {
   try {
-    const response = await axios.get(`https://23.102.236.197:8080/review_photos/download?photoId=${photoId}`, {
+    const response = await axios.get(`https://vmtest-1-w8r3.onrender.com/review_photos/download?photoId=${photoId}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
@@ -267,7 +267,7 @@ async function getImageSrc(photoId) {
 // 顯示圖片放大視窗
 const showPhotoModal = (photoId) => {
   // 設定圖片下載的 URL 並添加 Authorization header
-  const photoUrl = `https://23.102.236.197:8080/review_photos/download?photoId=${photoId}`;
+  const photoUrl = `https://vmtest-1-w8r3.onrender.com/review_photos/download?photoId=${photoId}`;
 
   // 使用 axios 获取图片内容（可根据需求进行调整）
   axios.get(photoUrl, {
@@ -294,7 +294,7 @@ const deleteReview = (event, reviewId) => {
   event.stopPropagation()
   if (!confirm("確定要刪除此評論嗎？")) return
 
-  axios.delete(`https://23.102.236.197:8080/api/vendor_admin/review/delete/${reviewId}`)
+  axios.delete(`https://vmtest-1-w8r3.onrender.com/api/vendor_admin/review/delete/${reviewId}`)
     .then(() => {
       // 先销毁 DataTable（如果已初始化）
       if (dataTable) {

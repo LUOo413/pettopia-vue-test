@@ -87,7 +87,7 @@ const filterStatus = ref('已認證');  // 默认为申請中
 
 const submitForm = () => {
     // 检查该店家是否已经申请过该认证标语
-    axios.get(`https://23.102.236.197:8080/api/vendor_admin/certification/exists/${vendorId.value}/${certificationTagId.value}`)
+    axios.get(`https://vmtest-1-w8r3.onrender.com/api/vendor_admin/certification/exists/${vendorId.value}/${certificationTagId.value}`)
         .then(response => {
             if (response.data.exists) {
                 alert('您已經申請過囉，請等待審核結果');
@@ -97,7 +97,7 @@ const submitForm = () => {
                 formdata.append("vendorId", vendorId.value);
                 formdata.append("tagId", certificationTagId.value);
 
-                axios.post('https://23.102.236.197:8080/api/vendor_admin/certification/add', formdata)
+                axios.post('https://vmtest-1-w8r3.onrender.com/api/vendor_admin/certification/add', formdata)
                     .then(response => {
                         alert('申請成功');
                         window.location.reload();
@@ -115,7 +115,7 @@ const submitForm = () => {
 
 const deleteCertification = (recordId) => {
     if (confirm("確定要取消申請嗎？")) {
-        axios.delete(`https://23.102.236.197:8080/api/vendor_admin/certification/delete/${recordId}`)
+        axios.delete(`https://vmtest-1-w8r3.onrender.com/api/vendor_admin/certification/delete/${recordId}`)
             .then(response => {
                 alert('取消申請成功');
                 // 删除成功后重新加载认证申请记录
@@ -129,7 +129,7 @@ const deleteCertification = (recordId) => {
 };
 const fetchCertification = () => {
     // 獲取申請紀錄
-    axios.get(`https://23.102.236.197:8080/api/vendor_admin/certification/${vendorId.value}`)
+    axios.get(`https://vmtest-1-w8r3.onrender.com/api/vendor_admin/certification/${vendorId.value}`)
         .then(response => {
             console.log(response.data);
             certificationRecords.value = response.data.map(record => ({
@@ -157,7 +157,7 @@ const filteredRecords = computed(() => {
 // 獲取認證標語列表
 onMounted(() => {
 
-    axios.get('https://23.102.236.197:8080/api/certification_type/all')
+    axios.get('https://vmtest-1-w8r3.onrender.com/api/certification_type/all')
         .then(response => {
             console.log(response.data);
             certificationTags.value = response.data;

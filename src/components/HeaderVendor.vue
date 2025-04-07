@@ -352,7 +352,7 @@ const searchVendor = async () => {
   formData.append('keyword', keyword.value)
 
   try {
-    const response = await fetch(`https://23.102.236.197:8080/api/vendor/find`, {
+    const response = await fetch(`https://vmtest-1-w8r3.onrender.com/api/vendor/find`, {
       method: 'POST',
       body: formData,
     })
@@ -380,7 +380,7 @@ const memberId = 11 // 假设当前会员ID为1，实际应用中请从用户信
 // 获取通知列表
 const getNotifications = async () => {
   try {
-    const response = await axios.get(`https://23.102.236.197:8080/api/vendor/notification/${memberId}`)
+    const response = await axios.get(`https://vmtest-1-w8r3.onrender.com/api/vendor/notification/${memberId}`)
     notifications.value = response.data.reverse()
   } catch (error) {
     console.error('获取通知失败:', error)
@@ -400,7 +400,7 @@ const toggleNotifications = () => {
 // 标记通知为已读
 const markAsRead = async (index, notificationId) => {
   try {
-    await axios.put(`https://23.102.236.197:8080/api/vendor/notification/read/${notificationId}`)
+    await axios.put(`https://vmtest-1-w8r3.onrender.com/api/vendor/notification/read/${notificationId}`)
     notifications.value[index].isRead = true
   } catch (error) {
     console.error('标记通知失败:', error)
@@ -410,7 +410,7 @@ const markAsRead = async (index, notificationId) => {
 // 清除所有通知
 const clearNotifications = async () => {
   try {
-    await axios.delete(`https://23.102.236.197:8080/api/vendor/notification/delete/${memberId}`)
+    await axios.delete(`https://vmtest-1-w8r3.onrender.com/api/vendor/notification/delete/${memberId}`)
     notifications.value = []
   } catch (error) {
     console.error('清除通知失败:', error)

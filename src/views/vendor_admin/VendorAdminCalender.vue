@@ -140,7 +140,7 @@ const calendarOptions = ref({
       };
 
       // 调用后端 API 更新数据库
-      const response = await axios.put(`https://23.102.236.197:8080/api/vendor_admin/calendar/update/${updatedEvent.eventId}`, null, {
+      const response = await axios.put(`https://vmtest-1-w8r3.onrender.com/api/vendor_admin/calendar/update/${updatedEvent.eventId}`, null, {
         params: updatedEvent
       });
 
@@ -157,7 +157,7 @@ const calendarOptions = ref({
 
 const loadEvents = async () => {
   try {
-    const response = await axios.get(`https://23.102.236.197:8080/api/vendor_admin/calendar/${vendorId}`);
+    const response = await axios.get(`https://vmtest-1-w8r3.onrender.com/api/vendor_admin/calendar/${vendorId}`);
     console.log("後端回傳數據:", response.data);
 
     // 確保 Vue 能偵測變更，直接修改 ref([]) 內的值
@@ -216,7 +216,7 @@ const addEvent = async () => {
     : `${eventStartDate.value}T${eventStartTime.value}`);
   formData.append("color", eventColor.value);  // 发送颜色;
   try {
-    const response = await axios.post("https://23.102.236.197:8080/api/vendor_admin/calendar/add", formData, {
+    const response = await axios.post("https://vmtest-1-w8r3.onrender.com/api/vendor_admin/calendar/add", formData, {
       headers: {
         'Content-Type': 'multipart/form-data',  // 发送表单数据时需要设置此头部
       },
@@ -279,7 +279,7 @@ const updateEvent = async () => {
   }
 
   try {
-    const response = await axios.put(`https://23.102.236.197:8080/api/vendor_admin/calendar/update/${editEventId.value}`, null, {
+    const response = await axios.put(`https://vmtest-1-w8r3.onrender.com/api/vendor_admin/calendar/update/${editEventId.value}`, null, {
       params: {
         eventTitle: editEventTitle.value,
         start_time: `${editEventStartDate.value}T${editEventStartTime.value}`,
@@ -312,7 +312,7 @@ const updateEvent = async () => {
 const deleteEvent = async () => {
   if (!editEventId.value) return;
   try {
-    await axios.delete(`https://23.102.236.197:8080/api/vendor_admin/calendar/delete/${editEventId.value}`);
+    await axios.delete(`https://vmtest-1-w8r3.onrender.com/api/vendor_admin/calendar/delete/${editEventId.value}`);
     const calendarApi = calendar.value?.getApi();
     const event = calendarApi?.getEventById(editEventId.value);
     if (event) {

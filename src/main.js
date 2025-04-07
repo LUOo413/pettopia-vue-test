@@ -24,7 +24,7 @@ import piniaPluginPersistedState from 'pinia-plugin-persistedstate'
 // import './assets/main.css'
 
 // 配置 axios
-axios.defaults.baseURL = 'https://23.102.236.197:8080'
+axios.defaults.baseURL = 'https://vmtest-1-w8r3.onrender.com'
 axios.defaults.withCredentials = true; // 設定攜帶 cookie
 // 添加請求攔截器，自動添加認證頭
 axios.interceptors.request.use(

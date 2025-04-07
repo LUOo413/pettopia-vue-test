@@ -29,7 +29,7 @@
                   <td>{{ index + 1 }}</td>
                   <td>
                     <a :href="`/vendor/detail/${like.vendorId}`"><span v-if="like.vendorName">{{ like.vendorName
-                        }}</span>
+                    }}</span>
                       <span v-else style="color: #cfcfcf"> 無店家名稱 </span></a>
                   </td>
                   <td>{{ like.vendorCategory }}</td>
@@ -65,7 +65,7 @@
                   <td>{{ index + 1 }}</td>
                   <td>
                     <a :href="`/vendor/detail/${review.vendorId}`"><span v-if="review.vendorName">{{ review.vendorName
-                        }}</span>
+                    }}</span>
                       <span v-else style="color: #cfcfcf"> 無店家名稱 </span></a>
                   </td>
                   <td>{{ review.reviewContent }}</td>
@@ -199,7 +199,7 @@ const reviewList = ref([
 /* 1. 獲取收藏列表 */
 const fetchActivityLike = async () => {
   try {
-    const response = await fetch(`https://23.102.236.197:8080/api/vendor/member/${memberId.value}/like`)
+    const response = await fetch(`https://vmtest-1-w8r3.onrender.com/api/vendor/member/${memberId.value}/like`)
 
     const data = await response.json()
     likeList.value = data
@@ -212,7 +212,7 @@ onMounted(fetchActivityLike)
 /* 2. 獲取評論列表 */
 const fetchActivityReview = async () => {
   try {
-    const response = await fetch(`https://23.102.236.197:8080/api/vendor/member/${memberId.value}/review`)
+    const response = await fetch(`https://vmtest-1-w8r3.onrender.com/api/vendor/member/${memberId.value}/review`)
 
     const data = await response.json()
     reviewList.value = data
@@ -238,7 +238,7 @@ const deleteLike = async (likeId) => {
   }
 
   try {
-    const response = await fetch(`https://23.102.236.197:8080/api/vendor/like/${likeId}/delete`, {
+    const response = await fetch(`https://vmtest-1-w8r3.onrender.com/api/vendor/like/${likeId}/delete`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
@@ -312,7 +312,7 @@ const openReview = async (reviewId, index) => {
   rewriteReviewId.value = reviewId // 存到全域變數
   reviewIndexId.value = index + 1
 
-  const response1 = await fetch(`https://23.102.236.197:8080/api/vendor/review/${reviewId}`, {
+  const response1 = await fetch(`https://vmtest-1-w8r3.onrender.com/api/vendor/review/${reviewId}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   })
@@ -322,7 +322,7 @@ const openReview = async (reviewId, index) => {
   review.value.ratingPrice = result1.review.ratingPrice
   review.value.ratinService = result1.review.ratingService
 
-  const response2 = await fetch(`https://23.102.236.197:8080/api/vendor/review/${reviewId}/photo`, {
+  const response2 = await fetch(`https://vmtest-1-w8r3.onrender.com/api/vendor/review/${reviewId}/photo`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
   })
@@ -357,7 +357,7 @@ const submitRewirte = async () => {
 
   try {
     const response = await fetch(
-      `https://23.102.236.197:8080/api/vendor/review/${rewriteReviewId.value}/rewrite/final`,
+      `https://vmtest-1-w8r3.onrender.com/api/vendor/review/${rewriteReviewId.value}/rewrite/final`,
       {
         method: 'PUT',
         body: formData,
@@ -391,7 +391,7 @@ const resetComment = async () => {
   }
 
   const response1 = await fetch(
-    `https://23.102.236.197:8080/api/vendor/review/${rewriteReviewId.value}`,
+    `https://vmtest-1-w8r3.onrender.com/api/vendor/review/${rewriteReviewId.value}`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -404,7 +404,7 @@ const resetComment = async () => {
   review.value.ratinService = result1.review.ratingService
 
   const response2 = await fetch(
-    `https://23.102.236.197:8080/api/vendor/review/${rewriteReviewId.value}/photo`,
+    `https://vmtest-1-w8r3.onrender.com/api/vendor/review/${rewriteReviewId.value}/photo`,
     {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
@@ -433,7 +433,7 @@ const deleteReview = async (reviewId) => {
   }
 
   try {
-    const response = await fetch(`https://23.102.236.197:8080/api/vendor/review/${reviewId}/delete`, {
+    const response = await fetch(`https://vmtest-1-w8r3.onrender.com/api/vendor/review/${reviewId}/delete`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })

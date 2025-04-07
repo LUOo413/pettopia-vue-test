@@ -13,7 +13,7 @@
                   style="margin-bottom: 15px" /></span>
               <h3>
                 主辦店家：<a :href="`/vendor/detail/${slide.vendor.id}`"><span v-if="slide.vendor.name">{{ slide.vendor.name
-                    }}</span><span v-else style="gray">無店家名稱</span></a>
+                }}</span><span v-else style="gray">無店家名稱</span></a>
               </h3>
             </div>
             <div class="content-wrapper col-md-7 p-5 mb-5">
@@ -116,7 +116,7 @@ const shuffleList = (array) => {
 const activityList = ref([])
 const fetchActivityList = async () => {
   try {
-    const response = await fetch(`https://23.102.236.197:8080/api/activity/all`)
+    const response = await fetch(`https://vmtest-1-w8r3.onrender.com/api/activity/all`)
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`)
 
     const data = await response.json()
@@ -133,7 +133,7 @@ const filters = ref([])
 
 const fetchActivityType = async () => {
   try {
-    const response = await fetch(`https://23.102.236.197:8080/api/activity/type/show`)
+    const response = await fetch(`https://vmtest-1-w8r3.onrender.com/api/activity/type/show`)
 
     const data = await response.json()
     filters.value = filters.value = [
