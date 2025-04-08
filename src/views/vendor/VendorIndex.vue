@@ -50,10 +50,10 @@
               </span>
             </a>
             <div class="card-body p-0">
-              <a :href="`/vendor/detail/${vendor.id}`" v-if="vendor.name">
+              <a :href="`/vendor-detail/${vendor.id}`" v-if="vendor.name">
                 <h2 class="card-title pt-4 m-0">{{ vendor.name }}</h2>
               </a>
-              <a :href="`/vendor/detail/${vendor.id}`" v-else>
+              <a :href="`/vendor-detail/${vendor.id}`" v-else>
                 <h2 class="card-title pt-4 m-0" style="color: #d3d3d3">無店家名稱</h2>
               </a>
               <div class="card-text">
