@@ -13,13 +13,13 @@ export default [
     component: Vendor,
   },
   {
-    path: '/vendor/index',
+    path: '/vendor-index',
     name: 'VendorIndex',
     component: VendorIndex,
   },
 
   {
-    path: '/vendor/detail/:vendorId',
+    path: '/vendor-detail/:vendorId',
     name: 'VendorDetail',
     component: VendorDetail,
     props: (route) => ({ vendorId: Number(route.params.vendorId) }), // 確保vendorId為數字
