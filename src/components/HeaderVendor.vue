@@ -314,7 +314,7 @@
               <a class="nav-link" href="/vendor">首頁</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/vendor/index">店家</a>
+              <a class="nav-link" href="/vendor-index">店家</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/activity/index">活動</a>
