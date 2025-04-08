@@ -41,7 +41,7 @@
         <div v-for="vendor in filteredVendors" :key="vendor.id"
           :class="['item', vendor.id, 'col-md-4', 'col-lg-3', 'my-4']">
           <div class="card position-relative">
-            <a :href="`/vendor/detail/${vendor.id}`">
+            <a :href="`/vendor-detail/${vendor.id}`">
               <span v-if="vendor.logoImgBase64">
                 <img :src="vendor.logoImgBase64" class="img-fluid rounded-4" alt="店家圖片" />
               </span>
